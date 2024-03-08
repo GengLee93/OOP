@@ -48,4 +48,18 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
+	draw_text();
+}
+void CGameStateInit::draw_text() {
+	CDC *pDC = CDDraw::GetBackCDC();
+
+	/* Print title */
+	CTextDraw::ChangeFontLog(pDC, 44, "微軟正黑體", RGB(255, 255, 255));
+	CTextDraw::Print(pDC, 290, 228, "小朋友下樓梯");
+
+	/* Print info */
+	CTextDraw::ChangeFontLog(pDC,  34, "微軟正黑體", RGB(255, 255, 255));
+	CTextDraw::Print(pDC, 282, 431, "Press any key to start");
+
+	CDDraw::ReleaseBackCDC();
 }
