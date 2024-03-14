@@ -90,6 +90,17 @@ namespace game_framework {
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
+	private:
+		CMovingBitmap background;
+		CMovingBitmap ceiling; // 天花板
+		CMovingBitmap nails; // 地刺
+		CMovingBitmap player;
+		CMovingBitmap normal; // 一般磚塊
+		CMovingBitmap conveyor_left; //向左傳送帶
+		CMovingBitmap conveyor_right; //向右傳送帶
+		CMovingBitmap fake;
+		CMovingBitmap wall[2];	
+		void show_image_by_phase();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

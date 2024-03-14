@@ -38,7 +38,7 @@ void CGameStateInit::OnBeginState()
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-
+	
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -59,7 +59,7 @@ void CGameStateInit::draw_text() {
 
 	/* Print info */
 	CTextDraw::ChangeFontLog(pDC,  34, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 282, 431, "Press any key to start");
+	CTextDraw::Print(pDC, 282, 431, "Click to start");
 
 	CDDraw::ReleaseBackCDC();
 }
