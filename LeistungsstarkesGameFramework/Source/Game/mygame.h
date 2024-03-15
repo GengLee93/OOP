@@ -96,11 +96,13 @@ namespace game_framework {
 		CMovingBitmap nails; // 地刺
 		CMovingBitmap player;
 		CMovingBitmap normal; // 一般磚塊
+		CMovingBitmap fake; // 假磚塊
 		CMovingBitmap conveyor_left; //向左傳送帶
 		CMovingBitmap conveyor_right; //向右傳送帶
-		CMovingBitmap fake;
-		CMovingBitmap wall[2];	
-		void show_image_by_phase();
+		CMovingBitmap wall[2];
+		CMovingBitmap trampoline; // 彈簧
+		CMovingBitmap life; // 生命
+		std::vector<CMovingBitmap> stairs;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
