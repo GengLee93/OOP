@@ -30,39 +30,6 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	for (int i = 0; i < 9; ++i)
-	{
-		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 5);
-	}
-	
-	
-	
-}
-
-void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
-{
-	background.LoadBitmapByString({"Resources/background.bmp"});
-	background.SetTopLeft(100, 150);
-	for (int i = 0; i < 2; i++)
-	{
-		wall[i].LoadBitmapByString({"Resources/wall.bmp"});
-		wall[i].SetTopLeft(75 + 700 * i, 150);
-	}
-	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
-	ceiling.SetTopLeft(100, 150);
-	
-	srand(size_t(time(NULL)));
-	int min = 150;
-	int max = 650;
-	for (int i = 0; i < 9; i++)
-	{
-		CMovingBitmap block;
-		unsigned int x = rand() % (max - min + 1) + min;
-		block.LoadBitmapByString({"Resources/normal.bmp"});
-		block.SetTopLeft(x, 300 + i*100);
-		stairs.push_back(block);
-	}
-	size_t life = 99999999; // 測試用生命值
 	std::vector<std::string> stairs_image = {
 		"Resources/nails.bmp",
 		"Resources/normal.bmp",
@@ -71,18 +38,53 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		"Resources/fake.bmp",
 		"Resources/trampoline.bmp"
 	};
-	while (life > 0 && stairs[0].GetTop() < 150) // the top stair is overlap with the ceiling
+	for (int i = 0; i < 9; ++i)
 	{
-		stairs.erase(stairs.begin());
-		srand(unsigned int(time(NULL)));
+		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 5);
+	}
+	if (stairs[0].GetTop() < 150)
+	{
+		// 隨機產生新磚塊類型
 		int min=0;
 		int max=5;
 		unsigned int i = rand() % (max - min + 1) + min;
-		CMovingBitmap newStair;
-		newStair.LoadBitmapByString({stairs_image[i]});
-		newStair.SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop());
-		stairs.push_back(newStair);
+
+		// 創建新磚塊志尾部
+		//CMovingBitmap newStair;
+		stairs[0].LoadBitmapByString({stairs_image[i]});
+		stairs[0].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop());
+		//stairs.push_back(newStair);
 	}
+	
+	
+}
+
+void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
+{
+	background.LoadBitmapByString({"Resources/background.bmp"});
+	background.SetTopLeft(100, 150);
+	
+	for (int i = 0; i < 2; i++)
+	{
+		wall[i].LoadBitmapByString({"Resources/wall.bmp"});
+		wall[i].SetTopLeft(75 + 700 * i, 150);
+	}
+	
+	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
+	ceiling.SetTopLeft(100, 150);
+
+	srand(size_t(time(NULL)));
+	int min_x = 150;
+	int max_x = 650;
+	for (int i = 0; i < 9; i++)
+	{
+		CMovingBitmap block;
+		unsigned int x = rand() % (max_x - min_x + 1) + min_x;
+		block.LoadBitmapByString({"Resources/normal.bmp"});
+		block.SetTopLeft(x, 300 + i*100);
+		stairs.push_back(block);
+	}
+	
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
