@@ -38,23 +38,39 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		"Resources/fake.bmp",
 		"Resources/trampoline.bmp"
 	};
+	int min=0;
+	int max=5;
+	int min_x = 150;
+	int max_x = 650;
 	for (int i = 0; i < 9; ++i)
 	{
-		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 5);
-	}
-	if (stairs[0].GetTop() < 150)
-	{
-		// 隨機產生新磚塊類型
-		int min=0;
-		int max=5;
-		unsigned int i = rand() % (max - min + 1) + min;
+		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
+		if (stairs[i].GetTop() < 180)
+		{
+			// 隨機產生新磚塊類型
+			unsigned int j = rand() % (max - min + 1) + min;
 
-		// 創建新磚塊志尾部
-		//CMovingBitmap newStair;
-		stairs[0].LoadBitmapByString({stairs_image[i]});
-		stairs[0].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop());
-		//stairs.push_back(newStair);
+			// 創建新磚塊至尾部
+			CMovingBitmap block;
+			block.LoadBitmapByString({stairs_image[j]});
+			unsigned int x = rand() % (max_x - min_x + 1) + min_x;
+			stairs[i] = block;
+			stairs[i].SetTopLeft(x, 1100);
+		}
 	}
+	// if (stairs[0].GetTop() < 150)
+	// {
+	// 	// 隨機產生新磚塊類型
+	// 	int min=0;
+	// 	int max=5;
+	// 	unsigned int i = rand() % (max - min + 1) + min;
+	//
+	// 	// 創建新磚塊志尾部
+	// 	//CMovingBitmap newStair;
+	// 	stairs[0].LoadBitmapByString({stairs_image[i]});
+	// 	stairs[0].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop());
+	// 	//stairs.push_back(newStair);
+	// }
 	
 	
 }
