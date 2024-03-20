@@ -33,28 +33,32 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	std::vector<std::string> stairs_image = {
 		"Resources/nails.bmp",
 		"Resources/normal.bmp",
-		"Resources/conveyor_left.bmp",
-		"Resources/conveyor_right.bmp",
-		"Resources/fake.bmp",
-		"Resources/trampoline.bmp"
+		"Resources/conveyor_left2.bmp",
+		"Resources/conveyor_right2.bmp",
+		"Resources/fake2.bmp",
+		"Resources/trampoline2.bmp"
 	};
+	int min=0;			
+	int max=5;
+	int min_x = 150;
+	int max_x = 650;
 	for (int i = 0; i < 9; ++i)
 	{
-		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 5);
+		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
+		if (stairs[0].GetTop() < 180)
+		{
+			unsigned int randomBlock = rand() % (max - min + 1) + min;
+			
+			// 隨機產生新磚塊類型
+			CMovingBitmap block;
+			block.LoadBitmapByString({stairs_image[randomBlock]});
+			unsigned int x = rand() % (max_x - min_x + 1) + min_x;
+			
+			stairs[i] = block;
+			block.SetTopLeft(x, 1100);
+		}
 	}
-	if (stairs[0].GetTop() < 150)
-	{
-		// 隨機產生新磚塊類型
-		int min=0;
-		int max=5;
-		unsigned int i = rand() % (max - min + 1) + min;
-
-		// 創建新磚塊志尾部
-		//CMovingBitmap newStair;
-		stairs[0].LoadBitmapByString({stairs_image[i]});
-		stairs[0].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop());
-		//stairs.push_back(newStair);
-	}
+	
 	
 	
 }
@@ -76,7 +80,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	srand(size_t(time(NULL)));
 	int min_x = 150;
 	int max_x = 650;
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 9; i++) // init 9 normal blocks
 	{
 		CMovingBitmap block;
 		unsigned int x = rand() % (max_x - min_x + 1) + min_x;
@@ -125,7 +129,8 @@ void CGameStateRun::OnShow()
 		}
 		for (unsigned int i = 0; i < stairs.size(); i++)
 		{
-			if (CMovingBitmap::IsOverlap(stairs[i], background)) // stairs only show on the background
+			// stairs only show on the background
+			if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 			{
 				stairs[i].ShowBitmap();
 			}
