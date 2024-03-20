@@ -38,29 +38,27 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		"Resources/fake2.bmp",
 		"Resources/trampoline2.bmp"
 	};
-	int min=0;			
-	int max=5;
+	int min = 0;
+	int max = 5;
 	int min_x = 150;
 	int max_x = 650;
 	for (int i = 0; i < 9; ++i)
 	{
 		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
-		if (stairs[0].GetTop() < 180)
+
+		if (stairs[i].GetTop() < 180)
 		{
-			unsigned int randomBlock = rand() % (max - min + 1) + min;
-			
 			// 隨機產生新磚塊類型
+			unsigned int j = rand() % (max - min + 1) + min;
+
+			// 創建新磚塊至尾部
 			CMovingBitmap block;
-			block.LoadBitmapByString({stairs_image[randomBlock]});
+			block.LoadBitmapByString({stairs_image[j]}, RGB(255, 255, 255));
 			unsigned int x = rand() % (max_x - min_x + 1) + min_x;
-			
 			stairs[i] = block;
-			block.SetTopLeft(x, 1100);
+			stairs[i].SetTopLeft(x, 1100);
 		}
 	}
-	
-	
-	
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
