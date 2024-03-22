@@ -20,6 +20,7 @@ CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
 }
 
+
 CGameStateRun::~CGameStateRun()
 {
 }
@@ -59,6 +60,17 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			stairs[i].SetTopLeft(x, 1100);
 		}
 	}
+	
+	// player overlap on conveyor
+	// conveyor_left.LoadBitmapByString({"Resources/conveyor_left2.bmp"});
+	// conveyor_right.LoadBitmapByString({"Resources/conveyor_right2.bmp"});
+	// if (CMovingBitmap::IsOverlap(player, conveyor_left))
+	// {
+	// 	player.SetTopLeft(player.GetLeft() - 2, player.GetTop());
+	// }else if (CMovingBitmap::IsOverlap(player, conveyor_right))
+	// {
+	// 	player.SetTopLeft(player.GetLeft() + 2, player.GetTop());
+	// }
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
@@ -86,6 +98,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.SetTopLeft(x, 300 + i*100);
 		stairs.push_back(block);
 	}
+	
 	
 }
 
@@ -118,21 +131,21 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 }
 
 void CGameStateRun::OnShow()
+{
+	background.ShowBitmap();
+	ceiling.ShowBitmap();
+	for (int i = 0; i < 2; i++)
 	{
-		background.ShowBitmap();
-		ceiling.ShowBitmap();
-		for (int i = 0; i < 2; i++)
+		wall[i].ShowBitmap();
+	}
+	for (unsigned int i = 0; i < stairs.size(); i++)
+	{
+		// stairs only show on the background
+		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
-			wall[i].ShowBitmap();
-		}
-		for (unsigned int i = 0; i < stairs.size(); i++)
-		{
-			// stairs only show on the background
-			if (CMovingBitmap::IsOverlap(stairs[i], background)) 
-			{
-				stairs[i].ShowBitmap();
-			}
+			stairs[i].ShowBitmap();
 		}
 	}
+}
 	
 	
