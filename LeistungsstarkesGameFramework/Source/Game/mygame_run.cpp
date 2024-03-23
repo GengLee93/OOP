@@ -63,7 +63,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		{
 			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
-			}else if (stairs[i].GetImageFileName() == "Resources/nail.bmp") {
+			}else if (stairs[i].GetImageFileName() == "Resources/nails.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
 				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
@@ -71,9 +71,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
 				fakeStairActivated = true;
-				_sleep(500);
-				fakeStairActivated = true;
-			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {	
+				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
+			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}
 		}else {
@@ -161,7 +160,7 @@ void CGameStateRun::OnShow()
 	{
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
-			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp" && !fakeStairActivated)
+			if (stairs[i].GetImageFileName() == "Resources/nails.bmp" && fakeStairActivated)
 			{
 				continue;
 			}
@@ -172,7 +171,6 @@ void CGameStateRun::OnShow()
 	{
 		player.ShowBitmap();
 	}
-	
 }
 	
 	
