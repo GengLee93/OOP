@@ -103,6 +103,7 @@ namespace game_framework {
 		CMovingBitmap trampoline; // ¼uÂ®
 		CMovingBitmap life; // ¥Í©R
 		std::vector<CMovingBitmap> stairs;
+		void playerOverlapingStairsLogic();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

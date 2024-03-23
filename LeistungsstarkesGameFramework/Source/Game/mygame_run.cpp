@@ -55,51 +55,62 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			// 創建新磚塊至尾部
 			CMovingBitmap block;
 			block.LoadBitmapByString({stairs_image[j]}, RGB(255, 255, 255));
-			unsigned int x = rand() % (max_x - min_x + 1) + min_x;
+			unsigned x = rand() % (max_x - min_x + 1) + min_x;
 			stairs[i] = block;
 			stairs[i].SetTopLeft(x, 1100);
 		}
+		if (CMovingBitmap::IsOverlap(player, stairs[i]))
+		{
+			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+			}else if (stairs[i].GetImageFileName() == "Resources/nail.bmp") {
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
+				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
+			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
+				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
+			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {	
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+			}
+		}else {
+			player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
+		}
 	}
-	
-	// player overlap on conveyor
-	// conveyor_left.LoadBitmapByString({"Resources/conveyor_left2.bmp"});
-	// conveyor_right.LoadBitmapByString({"Resources/conveyor_right2.bmp"});
-	// if (CMovingBitmap::IsOverlap(player, conveyor_left))
-	// {
-	// 	player.SetTopLeft(player.GetLeft() - 2, player.GetTop());
-	// }else if (CMovingBitmap::IsOverlap(player, conveyor_right))
-	// {
-	// 	player.SetTopLeft(player.GetLeft() + 2, player.GetTop());
-	// }
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 {
+	// 遊戲背景
 	background.LoadBitmapByString({"Resources/background.bmp"});
 	background.SetTopLeft(100, 150);
-	
-	for (int i = 0; i < 2; i++)
+
+	// 牆
+	for (size_t i = 0; i < 2; i++)
 	{
 		wall[i].LoadBitmapByString({"Resources/wall.bmp"});
 		wall[i].SetTopLeft(75 + 700 * i, 150);
 	}
-	
+
+	// 天花板
 	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
 	ceiling.SetTopLeft(100, 150);
-
+	
 	srand(size_t(time(NULL)));
-	int min_x = 150;
-	int max_x = 650;
-	for (int i = 0; i < 9; i++) // init 9 normal blocks
+	size_t min_x = 150;
+	size_t max_x = 650;
+	for (size_t i = 0; i < 9; i++) // init 9 normal blocks
 	{
 		CMovingBitmap block;
-		unsigned int x = rand() % (max_x - min_x + 1) + min_x;
+		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
-		block.SetTopLeft(x, 300 + i*100);
+		block.SetTopLeft(x, 300 + i * 100);
 		stairs.push_back(block);
 	}
 	
-	
+	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
+	player.SetTopLeft(450, 100);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -134,18 +145,22 @@ void CGameStateRun::OnShow()
 {
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
-	for (int i = 0; i < 2; i++)
+	for (size_t i = 0; i < 2; i++)
 	{
 		wall[i].ShowBitmap();
 	}
-	for (unsigned int i = 0; i < stairs.size(); i++)
+	for (size_t i = 0; i < stairs.size(); i++)
 	{
-		// stairs only show on the background
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
 			stairs[i].ShowBitmap();
 		}
 	}
+	if (CMovingBitmap::IsOverlap(player, background))
+	{
+		player.ShowBitmap();
+	}
+	
 }
 	
 	
