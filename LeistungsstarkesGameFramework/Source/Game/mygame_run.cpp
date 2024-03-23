@@ -70,13 +70,21 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+				fakeStairActivated = true;
+				_sleep(500);
+				fakeStairActivated = true;
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {	
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}
 		}else {
 			player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 		}
+	}
+
+	// when life=0 or player is overlaping with ceiling, the game is over
+	if (CMovingBitmap::IsOverlap(player, ceiling))
+	{
+		// 尚未解決如何從mygame_run 跳到 mygame_over
 	}
 }
 
@@ -153,6 +161,10 @@ void CGameStateRun::OnShow()
 	{
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
+			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp" && !fakeStairActivated)
+			{
+				continue;
+			}
 			stairs[i].ShowBitmap();
 		}
 	}
