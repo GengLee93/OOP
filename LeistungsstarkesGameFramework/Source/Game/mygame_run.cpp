@@ -70,6 +70,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
+				for(int i = 0 ;i < 100 ;i++)
 				fakeStairActivated = true;
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
@@ -84,6 +85,14 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	if (CMovingBitmap::IsOverlap(player, ceiling))
 	{
 		// 尚未解決如何從mygame_run 跳到 mygame_over
+	}
+	//腳色之左右移動
+	if(rbKeyPressed)
+	{
+		player.SetTopLeft(player.GetLeft()+9,player.GetTop());
+	}
+	else if (lbKeyPressed){
+		player.SetTopLeft(player.GetLeft()-9,player.GetTop());
 	}
 }
 
@@ -119,13 +128,34 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
 	player.SetTopLeft(450, 100);
 }
+	
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	//偵測左右鍵是否按下
+	switch (nChar)
+	{
+	case VK_LEFT:
+		lbKeyPressed = true;
+			break;
+	case VK_RIGHT:
+		rbKeyPressed = true;
+		break;
+	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	//偵測左右鍵是否放開
+	switch (nChar)
+	{
+	case VK_LEFT:
+		lbKeyPressed = false;
+		break;
+	case VK_RIGHT:
+		rbKeyPressed = false;
+		break;
+	}
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作

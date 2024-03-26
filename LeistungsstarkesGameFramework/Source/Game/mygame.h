@@ -104,6 +104,8 @@ namespace game_framework {
 		CMovingBitmap life; // ¥Í©R
 		std::vector<CMovingBitmap> stairs;
 		bool fakeStairActivated = false;
+		bool rbKeyPressed = false;
+		bool lbKeyPressed = false;
 		
 	};
 
