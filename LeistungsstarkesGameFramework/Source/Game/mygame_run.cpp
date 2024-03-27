@@ -70,7 +70,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
-				for(int i = 0 ;i < 100 ;i++)
 				fakeStairActivated = true;
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
@@ -132,7 +131,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	//偵測左右鍵是否按下
+	// 偵測左右鍵是否按下
 	switch (nChar)
 	{
 	case VK_LEFT:
@@ -146,7 +145,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	//偵測左右鍵是否放開
+	// 偵測左右鍵是否放開
 	switch (nChar)
 	{
 	case VK_LEFT:
