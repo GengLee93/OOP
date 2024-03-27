@@ -89,10 +89,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	//腳色之左右移動
 	if(rbKeyPressed)
 	{
-		player.SetTopLeft(player.GetLeft()+9,player.GetTop());
+		if( player.GetLeft() <= 720 )
+			player.SetTopLeft(player.GetLeft() + 9,player.GetTop());
+		
 	}
 	else if (lbKeyPressed){
-		player.SetTopLeft(player.GetLeft()-9,player.GetTop());
+		if(player.GetLeft() >= 100  )
+			player.SetTopLeft(player.GetLeft() - 9,player.GetTop());
 	}
 }
 
@@ -122,11 +125,12 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
 		block.SetTopLeft(x, 300 + i * 100);
-		stairs.push_back(block);
+		stairs.push_back(block);git 
 	}
 	
 	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
 	player.SetTopLeft(450, 100);
+	//players = {"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"};
 }
 	
 
@@ -137,6 +141,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 	case VK_LEFT:
 		lbKeyPressed = true;
+		//player.LoadBitmapByString()
 			break;
 	case VK_RIGHT:
 		rbKeyPressed = true;

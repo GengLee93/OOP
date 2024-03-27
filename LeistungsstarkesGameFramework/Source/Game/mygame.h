@@ -106,7 +106,7 @@ namespace game_framework {
 		bool fakeStairActivated = false;
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
-		
+		std::vector<CMovingBitmap> players;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
