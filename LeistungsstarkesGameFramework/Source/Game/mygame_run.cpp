@@ -125,12 +125,12 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
 		block.SetTopLeft(x, 300 + i * 100);
-		stairs.push_back(block);git 
+		stairs.push_back(block);
 	}
 	
-	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
+	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
+	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 100);
-	//players = {"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"};
 }
 	
 
@@ -141,10 +141,21 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 	case VK_LEFT:
 		lbKeyPressed = true;
-		//player.LoadBitmapByString()
+		if(player.GetImageFileName() == "Resources/p4.bmp")
+		{
+			
+			player.SetFrameIndexOfBitmap(4);
+		}
+		else  player.SetFrameIndexOfBitmap(3);
 			break;
 	case VK_RIGHT:
 		rbKeyPressed = true;
+		if(player.GetImageFileName() == "Resources/p2.bmp")
+		{
+			
+			player.SetFrameIndexOfBitmap(2);
+		}
+		else  player.SetFrameIndexOfBitmap(1);
 		break;
 	}
 }
@@ -161,6 +172,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		rbKeyPressed = false;
 		break;
 	}
+	player.SetFrameIndexOfBitmap(0);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
