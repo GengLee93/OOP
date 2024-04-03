@@ -107,6 +107,7 @@ namespace game_framework {
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
 		std::vector<CMovingBitmap> players;
+		int vy = 0; int gy = 0; 
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

@@ -31,6 +31,7 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	
 	std::vector<std::string> stairs_image = {
 		"Resources/nails.bmp",
 		"Resources/normal.bmp",
@@ -61,25 +62,26 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		}
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
 		{
+			vy = 0;
+			gy = 0;
 			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}else if (stairs[i].GetImageFileName() == "Resources/nails.bmp") {
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 1);
 			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
 				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
-				for(int i = 0 ;i < 100 ;i++)
 				fakeStairActivated = true;
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+				gy = -12;
 			}
-		}else {
-			player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 		}
 	}
+	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
 	// when life=0 or player is overlaping with ceiling, the game is over
 	if (CMovingBitmap::IsOverlap(player, ceiling))
@@ -96,6 +98,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	else if (lbKeyPressed){
 		if(player.GetLeft() >= 100  )
 			player.SetTopLeft(player.GetLeft() - 9,player.GetTop());
+	}
+	vy  += 1;
+	if (vy % 2 == 0)
+	{
+		gy += 1;
 	}
 }
 
@@ -207,7 +214,7 @@ void CGameStateRun::OnShow()
 	{
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
-			if (stairs[i].GetImageFileName() == "Resources/nails.bmp" && fakeStairActivated)
+			if (stairs[i].GetImageFileName() == "Resources/fake.bmp" && fakeStairActivated)
 			{
 				continue;
 			}
