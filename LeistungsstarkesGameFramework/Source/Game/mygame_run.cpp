@@ -31,6 +31,7 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	
 	std::vector<std::string> stairs_image = {
 		"Resources/nails.bmp",
 		"Resources/normal.bmp",
@@ -61,10 +62,12 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		}
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
 		{
+			vy = 0;
+			gy = 0;
 			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}else if (stairs[i].GetImageFileName() == "Resources/nails.bmp") {
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 1);
 			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
 				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
 			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
@@ -74,11 +77,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+				gy = -12;
 			}
-		}else {
-			player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 		}
 	}
+	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
 	// when life=0 or player is overlaping with ceiling, the game is over
 	if (CMovingBitmap::IsOverlap(player, ceiling))
@@ -95,6 +98,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	else if (lbKeyPressed){
 		if(player.GetLeft() >= 100  )
 			player.SetTopLeft(player.GetLeft() - 9,player.GetTop());
+	}
+	vy  += 1;
+	if (vy % 2 == 0)
+	{
+		gy += 1;
 	}
 }
 
@@ -127,9 +135,13 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		stairs.push_back(block);
 	}
 	
-	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
+	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
+	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 100);
+<<<<<<< HEAD
 	// players = {"Resources/p1.bmp", "Resources/p2.bmp", "Resources/p3.bmp", "Resources/p4.bmp", "Resources/p5.bmp"};
+=======
+>>>>>>> 7f9e349ac5582e626058573f1414512d06850c42
 }
 	
 
@@ -140,10 +152,21 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 	case VK_LEFT:
 		lbKeyPressed = true;
-		//player.LoadBitmapByString()
+		if(player.GetImageFileName() == "Resources/p4.bmp")
+		{
+			
+			player.SetFrameIndexOfBitmap(4);
+		}
+		else  player.SetFrameIndexOfBitmap(3);
 			break;
 	case VK_RIGHT:
 		rbKeyPressed = true;
+		if(player.GetImageFileName() == "Resources/p2.bmp")
+		{
+			
+			player.SetFrameIndexOfBitmap(2);
+		}
+		else  player.SetFrameIndexOfBitmap(1);
 		break;
 	}
 }
@@ -160,6 +183,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		rbKeyPressed = false;
 		break;
 	}
+	player.SetFrameIndexOfBitmap(0);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
