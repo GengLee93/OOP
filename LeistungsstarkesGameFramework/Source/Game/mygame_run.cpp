@@ -124,12 +124,12 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
 		block.SetTopLeft(x, 300 + i * 100);
-		stairs.push_back(block);git 
+		stairs.push_back(block);
 	}
 	
 	player.LoadBitmapByString({"Resources/p1.bmp"}, RGB(255, 255, 255));
 	player.SetTopLeft(450, 100);
-	//players = {"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"};
+	// players = {"Resources/p1.bmp", "Resources/p2.bmp", "Resources/p3.bmp", "Resources/p4.bmp", "Resources/p5.bmp"};
 }
 	
 
@@ -194,7 +194,7 @@ void CGameStateRun::OnShow()
 	{
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
-			if (stairs[i].GetImageFileName() == "Resources/nails.bmp" && fakeStairActivated)
+			if (stairs[i].GetImageFileName() == "Resources/fake.bmp" && fakeStairActivated)
 			{
 				continue;
 			}
