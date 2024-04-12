@@ -88,6 +88,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		// 尚未解決如何從mygame_run 跳到 mygame_over
 	}
+	
 	//腳色之左右移動
 	if(rbKeyPressed)
 	{
@@ -99,10 +100,17 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		if(player.GetLeft() >= 100  )
 			player.SetTopLeft(player.GetLeft() - 9,player.GetTop());
 	}
-	vy  += 1;
+	vy += 1;
 	if (vy % 2 == 0)
 	{
 		gy += 1;
+	}
+	if (player.GetTop() > 770)
+	{
+		GotoGameState(GAME_STATE_INIT);
+		player.SetTopLeft(450, 100);
+		lbKeyPressed = 0;
+		rbKeyPressed = 0;
 	}
 }
 
@@ -138,10 +146,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 100);
-<<<<<<< HEAD
 	// players = {"Resources/p1.bmp", "Resources/p2.bmp", "Resources/p3.bmp", "Resources/p4.bmp", "Resources/p5.bmp"};
-=======
->>>>>>> 7f9e349ac5582e626058573f1414512d06850c42
 }
 	
 
