@@ -9,6 +9,8 @@
 #include "mygame.h"
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#include <string>
 
 using namespace game_framework;
 
@@ -60,13 +62,27 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			stairs[i] = block;
 			stairs[i].SetTopLeft(x, 1100);
 		}
+		
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
 		{
 			vy = 0;
 			gy = 0;
+			
 			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
 			}else if (stairs[i].GetImageFileName() == "Resources/nails.bmp") {
+				samenail2 = samenail;
+				samenail = i;
+				touchnail = true;
+				if(samenail == samenail2 || samenail == 10 )
+				{
+					touchnail = false;
+				}
+				
+				if (touchnail){
+					life -= 1;
+					touchnail = false;
+				}
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 1);
 			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
 				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
@@ -80,6 +96,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				gy = -12;
 			}
 		}
+
 	}
 	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
@@ -105,13 +122,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		gy += 1;
 	}
-	if (player.GetTop() > 770)
-	{
-		GotoGameState(GAME_STATE_INIT);
-		player.SetTopLeft(450, 100);
-		lbKeyPressed = 0;
-		rbKeyPressed = 0;
-	}
+	
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
@@ -147,6 +158,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 100);
 	// players = {"Resources/p1.bmp", "Resources/p2.bmp", "Resources/p3.bmp", "Resources/p4.bmp", "Resources/p5.bmp"};
+	life = 5;
 }
 	
 
@@ -213,6 +225,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
+	draw_text();
+	
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
 	for (size_t i = 0; i < 2; i++)
@@ -234,6 +248,32 @@ void CGameStateRun::OnShow()
 	{
 		player.ShowBitmap();
 	}
+	if (player.GetTop() > 770 || life == 0)
+	{
+		GotoGameState(GAME_STATE_INIT);
+		player.SetTopLeft(450, 100);
+		lbKeyPressed = 0;
+		rbKeyPressed = 0;
+		life = 5;
+		
+	}
+}
+
+void CGameStateRun::draw_text()
+{
+	CDC *pDC = CDDraw::GetBackCDC();
+	
+
+	// print life
+	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	std::string life_str = std::to_string(life);
+	std::string life_text = "life: " + life_str;
+	life_text = "Life:" + life_str;
+	CTextDraw::Print(pDC, 900, 150, life_text);
+
+	
+
+	CDDraw::ReleaseBackCDC();
 }
 	
 	

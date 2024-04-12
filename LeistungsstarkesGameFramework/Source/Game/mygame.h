@@ -91,6 +91,7 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
+		void draw_text();
 		CMovingBitmap background;
 		CMovingBitmap ceiling; // 天花板
 		CMovingBitmap nails; // 地刺
@@ -101,13 +102,17 @@ namespace game_framework {
 		CMovingBitmap conveyor_right; //向右傳送帶
 		CMovingBitmap wall[2];
 		CMovingBitmap trampoline; // 彈簧
-		CMovingBitmap life; // 生命
+		int life = 5;// 生命
+		bool touchnail = false;
+		int samenail = 10;
+		int samenail2 = 10;
 		std::vector<CMovingBitmap> stairs;
 		bool fakeStairActivated = false;
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
 		std::vector<CMovingBitmap> players;
-		int vy = 0; int gy = 0; 
+		int vy = 0; int gy = 0;
+		
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
