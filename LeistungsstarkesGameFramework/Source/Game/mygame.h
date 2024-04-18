@@ -107,6 +107,9 @@ namespace game_framework {
 		bool touchnail = false;
 		int samenail = 10;
 		int samenail2 = 10;
+		bool touchcei = 0;
+		bool touchcei2 = 0;
+		bool touchcei3 = 0;
 		std::vector<CMovingBitmap> stairs;
 		std::vector<CMovingBitmap> players;
 		bool fakeStairActivated = false;

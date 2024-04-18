@@ -65,6 +65,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
 		{
+			
 			vy = 0;
 			gy = 0;
 			
@@ -91,15 +92,22 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
 				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
-				gy = -12;
+				gy = -11;
 			}
 		}
 	}
 	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
 	// when life=0 or player is overlaping with ceiling, the game is over
-	if (CMovingBitmap::IsOverlap(player, ceiling))
+	touchcei2  = touchcei;
+	touchcei = CMovingBitmap::IsOverlap(player,ceiling);
+	
+	if (touchcei && !touchcei2)
 	{
+		player.SetTopLeft(player.GetLeft(),player.GetTop()+150);
+		gy = 1;
+		life -= 1;
+		
 		// 尚未解決如何從mygame_run 跳到 mygame_over
 	}
 	
@@ -146,14 +154,14 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		CMovingBitmap block;
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
-		block.SetTopLeft(x, 300 + i * 100);
+		block.SetTopLeft(x, 500 + i * 100);
 		stairs.push_back(block);
 	}
 	
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 200);
-	
+
 }
 	
 
@@ -250,10 +258,18 @@ void CGameStateRun::OnShow()
 	if (player.GetTop() > 770 || life == 0)
 	{
 		GotoGameState(GAME_STATE_INIT);
+<<<<<<< HEAD
 		player.SetTopLeft(450, 100);
 		lbKeyPressed = false;
 		rbKeyPressed = false;
 		life = 10;
+=======
+		player.SetTopLeft(450, 180);
+		lbKeyPressed = 0;
+		rbKeyPressed = 0;
+		life = 5;
+		
+>>>>>>> 492b80f304c54757f6c0d8bb25bfb997b8f655ef
 	}
 }
 
