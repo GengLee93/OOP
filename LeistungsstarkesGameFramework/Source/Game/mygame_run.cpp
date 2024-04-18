@@ -9,7 +9,6 @@
 #include "mygame.h"
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 #include <string>
 
 using namespace game_framework;
@@ -17,6 +16,21 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
+
+int min = 0;
+int max = 5;
+int min_x = 150;
+int max_x = 650;
+const std::vector<std::string> stairs_image = {
+	"Resources/nails.bmp",
+	"Resources/normal.bmp",
+	"Resources/conveyor_left2.bmp",
+	"Resources/conveyor_right2.bmp",
+	"Resources/fake2.bmp",
+	"Resources/trampoline2.bmp"
+};
+
+
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
@@ -34,33 +48,19 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	
-	std::vector<std::string> stairs_image = {
-		"Resources/nails.bmp",
-		"Resources/normal.bmp",
-		"Resources/conveyor_left2.bmp",
-		"Resources/conveyor_right2.bmp",
-		"Resources/fake2.bmp",
-		"Resources/trampoline2.bmp"
-	};
-	int min = 0;
-	int max = 5;
-	int min_x = 150;
-	int max_x = 650;
 	for (int i = 0; i < 9; ++i)
 	{
 		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
 
+		//  generate stairs
 		if (stairs[i].GetTop() < 180)
 		{
-			// 隨機產生新磚塊類型
 			unsigned int j = rand() % (max - min + 1) + min;
-
-			// 創建新磚塊至尾部
 			CMovingBitmap block;
 			block.LoadBitmapByString({stairs_image[j]}, RGB(255, 255, 255));
-			unsigned x = rand() % (max_x - min_x + 1) + min_x;
+			int x = rand() % (max_x - min_x + 1) + min_x;
 			stairs[i] = block;
-			stairs[i].SetTopLeft(x, 1100);
+			stairs[i].SetTopLeft(x, 1150);
 		}
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
@@ -74,12 +74,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				samenail2 = samenail;
 				samenail = i;
 				touchnail = true;
-				if(samenail == samenail2 || samenail == 10 )
-				{
+				if(samenail == samenail2 || samenail == 10 ) {
 					touchnail = false;
 				}
-				
-				if (touchnail){
+				if (touchnail) {
 					life -= 1;
 					touchnail = false;
 				}
@@ -96,7 +94,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				gy = -12;
 			}
 		}
-
 	}
 	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
@@ -106,12 +103,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		// 尚未解決如何從mygame_run 跳到 mygame_over
 	}
 	
-	//腳色之左右移動
+	// player 左右移動
 	if(rbKeyPressed)
 	{
 		if( player.GetLeft() <= 720 )
 			player.SetTopLeft(player.GetLeft() + 9,player.GetTop());
-		
 	}
 	else if (lbKeyPressed){
 		if(player.GetLeft() >= 100  )
@@ -144,7 +140,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	
 	srand(size_t(time(NULL)));
 	size_t min_x = 150;
-	size_t max_x = 650;
+	size_t max_x = 590;
 	for (size_t i = 0; i < 9; i++) // init 9 normal blocks
 	{
 		CMovingBitmap block;
@@ -156,9 +152,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
-	player.SetTopLeft(450, 100);
-	// players = {"Resources/p1.bmp", "Resources/p2.bmp", "Resources/p3.bmp", "Resources/p4.bmp", "Resources/p5.bmp"};
-	life = 5;
+	player.SetTopLeft(450, 200);
+	
 }
 	
 
@@ -167,24 +162,28 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 偵測左右鍵是否按下
 	switch (nChar)
 	{
-	case VK_LEFT:
-		lbKeyPressed = true;
-		if(player.GetImageFileName() == "Resources/p4.bmp")
-		{
-			
-			player.SetFrameIndexOfBitmap(4);
-		}
-		else  player.SetFrameIndexOfBitmap(3);
+		case VK_LEFT:
+			lbKeyPressed = true;
+			if(player.GetImageFileName() == "Resources/p4.bmp")
+			{
+				player.SetFrameIndexOfBitmap(4);
+			}
+			else
+			{
+				player.SetFrameIndexOfBitmap(3);
+			}
 			break;
-	case VK_RIGHT:
-		rbKeyPressed = true;
-		if(player.GetImageFileName() == "Resources/p2.bmp")
-		{
-			
-			player.SetFrameIndexOfBitmap(2);
-		}
-		else  player.SetFrameIndexOfBitmap(1);
-		break;
+		case VK_RIGHT:
+			rbKeyPressed = true;
+			if(player.GetImageFileName() == "Resources/p2.bmp")
+			{
+				player.SetFrameIndexOfBitmap(2);
+			}
+			else
+			{
+				player.SetFrameIndexOfBitmap(1);
+			}
+			break;
 	}
 }
 
@@ -252,10 +251,9 @@ void CGameStateRun::OnShow()
 	{
 		GotoGameState(GAME_STATE_INIT);
 		player.SetTopLeft(450, 100);
-		lbKeyPressed = 0;
-		rbKeyPressed = 0;
-		life = 5;
-		
+		lbKeyPressed = false;
+		rbKeyPressed = false;
+		life = 10;
 	}
 }
 
@@ -263,16 +261,19 @@ void CGameStateRun::draw_text()
 {
 	CDC *pDC = CDDraw::GetBackCDC();
 	
-
 	// print life
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-	std::string life_str = std::to_string(life);
-	std::string life_text = "life: " + life_str;
-	life_text = "Life:" + life_str;
+	std::string life_text;
+	life_text = "Life " + std::to_string(life);
 	CTextDraw::Print(pDC, 900, 150, life_text);
 
-	
+	// // print HI
+	// CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	// std::string HI_text;
+	// HI_text = "HI " + std::to_string((HI));
+	// CTextDraw::Print(pDC, 900, 200, HI_text);
 
+	
 	CDDraw::ReleaseBackCDC();
 }
 	

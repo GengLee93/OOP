@@ -102,15 +102,16 @@ namespace game_framework {
 		CMovingBitmap conveyor_right; //向右傳送帶
 		CMovingBitmap wall[2];
 		CMovingBitmap trampoline; // 彈簧
-		int life = 5;// 生命
+		size_t life = 10;
+		size_t HI; // 最高紀錄
 		bool touchnail = false;
 		int samenail = 10;
 		int samenail2 = 10;
 		std::vector<CMovingBitmap> stairs;
+		std::vector<CMovingBitmap> players;
 		bool fakeStairActivated = false;
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
-		std::vector<CMovingBitmap> players;
 		int vy = 0; int gy = 0;
 		
 	};
