@@ -258,18 +258,12 @@ void CGameStateRun::OnShow()
 	if (player.GetTop() > 770 || life == 0)
 	{
 		GotoGameState(GAME_STATE_INIT);
-<<<<<<< HEAD
 		player.SetTopLeft(450, 100);
 		lbKeyPressed = false;
 		rbKeyPressed = false;
 		life = 10;
-=======
-		player.SetTopLeft(450, 180);
-		lbKeyPressed = 0;
-		rbKeyPressed = 0;
-		life = 5;
+
 		
->>>>>>> 492b80f304c54757f6c0d8bb25bfb997b8f655ef
 	}
 }
 
