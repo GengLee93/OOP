@@ -17,10 +17,10 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-int min = 0;
-int max = 5;
-int min_x = 150;
-int max_x = 650;
+constexpr size_t min = 0;
+constexpr size_t max = 5;
+constexpr size_t min_x  = 150;
+constexpr size_t max_x = 630;
 const std::vector<std::string> stairs_image = {
 	"Resources/nails.bmp",
 	"Resources/normal.bmp",
@@ -50,22 +50,27 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	
 	for (int i = 0; i < 9; ++i)
 	{
+		
+
 		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
 
 		//  generate stairs
 		if (stairs[i].GetTop() < 180)
 		{
+			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp")
+			{
+				fakeStairActivated = false;
+			}
 			unsigned int j = rand() % (max - min + 1) + min;
 			CMovingBitmap block;
 			block.LoadBitmapByString({stairs_image[j]}, RGB(255, 255, 255));
 			int x = rand() % (max_x - min_x + 1) + min_x;
 			stairs[i] = block;
-			stairs[i].SetTopLeft(x, 1150);
+			stairs[i].SetTopLeft(x, 1500);
 		}
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i]))
 		{
-			
 			vy = 0;
 			gy = 0;
 			
@@ -147,20 +152,21 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	ceiling.SetTopLeft(100, 150);
 	
 	srand(size_t(time(NULL)));
-	size_t min_x = 150;
-	size_t max_x = 590;
 	for (size_t i = 0; i < 9; i++) // init 9 normal blocks
 	{
 		CMovingBitmap block;
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
 		block.LoadBitmapByString({"Resources/normal.bmp"});
-		block.SetTopLeft(x, 500 + i * 100);
+		block.SetTopLeft(x, 400 + i * 150);
 		stairs.push_back(block);
+		// 400 620 740 860, max = 850
 	}
 	
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 200);
+
+	life = 10;
 
 }
 	
@@ -244,32 +250,25 @@ void CGameStateRun::OnShow()
 	{
 		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
 		{
-			if (stairs[i].GetImageFileName() == "Resources/fake.bmp" && fakeStairActivated)
+			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp" && fakeStairActivated)
 			{
 				continue;
 			}
 			stairs[i].ShowBitmap();
+			
 		}
 	}
 	if (CMovingBitmap::IsOverlap(player, background))
 	{
 		player.ShowBitmap();
 	}
-	if (player.GetTop() > 770 || life == 0)
+	if (player.GetTop() > 850 || life == 0)
 	{
-		GotoGameState(GAME_STATE_INIT);
-<<<<<<< HEAD
-		player.SetTopLeft(450, 100);
+		GotoGameState(GAME_STATE_OVER);
+		player.SetTopLeft(450, 120);
 		lbKeyPressed = false;
 		rbKeyPressed = false;
 		life = 10;
-=======
-		player.SetTopLeft(450, 180);
-		lbKeyPressed = 0;
-		rbKeyPressed = 0;
-		life = 5;
-		
->>>>>>> 492b80f304c54757f6c0d8bb25bfb997b8f655ef
 	}
 }
 
@@ -292,5 +291,7 @@ void CGameStateRun::draw_text()
 	
 	CDDraw::ReleaseBackCDC();
 }
+
+
 	
 	
