@@ -11,6 +11,8 @@
 #include <time.h>
 #include <string>
 
+#include "UpdateStairs.h"
+
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -21,15 +23,6 @@ constexpr size_t min = 0;
 constexpr size_t max = 5;
 constexpr size_t min_x  = 150;
 constexpr size_t max_x = 630;
-const std::vector<std::string> stairs_image = {
-	"Resources/nails.bmp",
-	"Resources/normal.bmp",
-	"Resources/conveyor_left2.bmp",
-	"Resources/conveyor_right2.bmp",
-	"Resources/fake2.bmp",
-	"Resources/trampoline2.bmp"
-};
-
 
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -50,33 +43,30 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	
 	for (int i = 0; i < 9; ++i)
 	{
-		
-
-		stairs[i].SetTopLeft(stairs[i].GetLeft(), stairs[i].GetTop() - 3);
-
+		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - 3);
+	
 		//  generate stairs
-		if (stairs[i].GetTop() < 180)
+		if (stairs[i].Gety() < 180)
 		{
-			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp")
+			if (stairs[i].GetID() == 4)
 			{
 				fakeStairActivated = false;
 			}
-			unsigned int j = rand() % (max - min + 1) + min;
-			CMovingBitmap block;
-			block.LoadBitmapByString({stairs_image[j]}, RGB(255, 255, 255));
+			UpdateStairs block;
+			block.SetID(rand() % (max - min + 1) + min);
 			int x = rand() % (max_x - min_x + 1) + min_x;
 			stairs[i] = block;
-			stairs[i].SetTopLeft(x, 1500);
+			stairs[i].Setxy(x, 1500);
 		}
 		
-		if (CMovingBitmap::IsOverlap(player, stairs[i]))
+		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
 			vy = 0;
 			gy = 0;
 			
-			if (stairs[i].GetImageFileName() == "Resources/normal.bmp") {
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
-			}else if (stairs[i].GetImageFileName() == "Resources/nails.bmp") {
+			if (stairs[i].GetID() == 0) {
+				player.SetTopLeft(player.GetLeft(), stairs[i].Gety()- player.GetWidth() - 5);
+			}else if (stairs[i].GetID() == 1) {
 				samenail2 = samenail;
 				samenail = i;
 				touchnail = true;
@@ -87,16 +77,16 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 					life -= 1;
 					touchnail = false;
 				}
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 1);
-			}else if (stairs[i].GetImageFileName() == "Resources/conveyor_left2.bmp") {
-				player.SetTopLeft(player.GetLeft() - 5, stairs[i].GetTop() - player.GetWidth() - 5);
-			} else if (stairs[i].GetImageFileName() == "Resources/conveyor_right2.bmp") {
-				player.SetTopLeft(player.GetLeft() + 5, stairs[i].GetTop() - player.GetWidth() - 5);
-			} else if (stairs[i].GetImageFileName() == "Resources/fake2.bmp") {
+				player.SetTopLeft(player.GetLeft(), stairs[i].Gety() - player.GetWidth() - 1);
+			}else if (stairs[i].GetID() == 2) {
+				player.SetTopLeft(player.GetLeft() - 5, stairs[i].Gety() - player.GetWidth() - 5);
+			} else if (stairs[i].GetID() == 3) {
+				player.SetTopLeft(player.GetLeft() + 5, stairs[i].Gety() - player.GetWidth() - 5);
+			} else if (stairs[i].GetID() == 4) {
 				fakeStairActivated = true;
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
-			}else if (stairs[i].GetImageFileName() == "Resources/trampoline2.bmp") {
-				player.SetTopLeft(player.GetLeft(), stairs[i].GetTop() - player.GetWidth() - 5);
+			}else if (stairs[i].GetID() == 5) {
+				player.SetTopLeft(player.GetLeft(), stairs[i].Gety() - player.GetWidth() - 5);
 				gy = -11;
 			}
 		}
@@ -131,7 +121,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		gy += 1;
 	}
-	
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
@@ -139,7 +128,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	// 遊戲背景
 	background.LoadBitmapByString({"Resources/background.bmp"});
 	background.SetTopLeft(100, 150);
-
+	
 	// 牆
 	for (size_t i = 0; i < 2; i++)
 	{
@@ -152,12 +141,14 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	ceiling.SetTopLeft(100, 150);
 	
 	srand(size_t(time(NULL)));
-	for (size_t i = 0; i < 9; i++) // init 9 normal blocks
+	for (size_t i = 0; i < 9; i++) 
 	{
-		CMovingBitmap block;
+		UpdateStairs block;
 		size_t x = rand() % (max_x - min_x + 1) + min_x;
-		block.LoadBitmapByString({"Resources/normal.bmp"});
-		block.SetTopLeft(x, 400 + i * 150);
+		block.SetID(0); // init 9 normal blocks
+		block.Getpicture();
+		// block.Setxy(400, 400);
+		block.Setxy(x, 400 + i * 150);
 		stairs.push_back(block);
 		// 400 620 740 860, max = 850
 	}
@@ -167,7 +158,6 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	player.SetTopLeft(450, 180);
 
 	life = 10;
-
 }
 	
 
@@ -248,23 +238,18 @@ void CGameStateRun::OnShow()
 	}
 	for (size_t i = 0; i < stairs.size(); i++)
 	{
-		if (CMovingBitmap::IsOverlap(stairs[i], background)) 
+		if (CMovingBitmap::IsOverlap(stairs[i].Getpicture(), background)) 
 		{
-			if (stairs[i].GetImageFileName() == "Resources/fake2.bmp" && fakeStairActivated)
-			{
-				continue;
-			}
-			stairs[i].ShowBitmap();
-			
+			stairs[i].Getpicture().ShowBitmap();
 		}
 	}
+	
 	if (CMovingBitmap::IsOverlap(player, background))
 	{
 		player.ShowBitmap();
 	}
 	if (player.GetTop() > 850 || life == 0)
 	{
-
 		GotoGameState(GAME_STATE_OVER);
 		player.SetTopLeft(450, 180);
 		lbKeyPressed = false;
@@ -288,7 +273,6 @@ void CGameStateRun::draw_text()
 	// std::string HI_text;
 	// HI_text = "HI " + std::to_string((HI));
 	// CTextDraw::Print(pDC, 900, 200, HI_text);
-
 	
 	CDDraw::ReleaseBackCDC();
 }
