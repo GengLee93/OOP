@@ -114,7 +114,6 @@ namespace game_framework {
 		bool touchcei3 = 0;
 		std::vector<UpdateStairs> stairs;
 		std::vector<CMovingBitmap> players;
-		bool fakeStairActivated = false;
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
 		int vy = 0; int gy = 0;

@@ -7,9 +7,9 @@ UpdateStairs::UpdateStairs() : id(0), isHidden(false), x(x), y(y) {}
  
 CMovingBitmap UpdateStairs::Getpicture()
 {
-    
     return spicture;
 }
+
 void UpdateStairs::SetID(size_t new_id)
 {
     this->id = new_id;
@@ -39,7 +39,7 @@ size_t UpdateStairs::GetID()
 
 int UpdateStairs::Getx()
 {
-    return  this->x;
+    return this->x;
 }
 
 int UpdateStairs::Gety()
@@ -51,4 +51,3 @@ bool UpdateStairs::GetHidden()
 {
     return this->isHidden;
 }
-

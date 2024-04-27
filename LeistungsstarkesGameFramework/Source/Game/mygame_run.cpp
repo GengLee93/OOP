@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string>
+#include <random>
 
 #include "UpdateStairs.h"
 
@@ -19,10 +20,10 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-constexpr size_t min = 0;
-constexpr size_t max = 5;
-constexpr size_t min_x  = 150;
-constexpr size_t max_x = 630;
+constexpr size_t min_stairs_id = 0;
+constexpr size_t max_stairs_id = 5;
+constexpr size_t min_x_coordinate  = 150;
+constexpr size_t max_x_coordinate = 630;
 
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -48,22 +49,16 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		//  generate stairs
 		if (stairs[i].Gety() < 180)
 		{
-			if (stairs[i].GetID() == 4)
-			{
-				fakeStairActivated = false;
-			}
 			UpdateStairs block;
-			block.SetID(rand() % (max - min + 1) + min);
-			int x = rand() % (max_x - min_x + 1) + min_x;
+			block.SetID(rand() % (max_stairs_id - min_stairs_id + 1) + min_stairs_id);
+			const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 			stairs[i] = block;
-			stairs[i].Setxy(x, 1500);
+			stairs[i].Setxy(random_x, 1500);
 		}
-		
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
 			vy = 0;
 			gy = 0;
-			
 			if (stairs[i].GetID() == 0) {
 				player.SetTopLeft(player.GetLeft(), stairs[i].Gety()- player.GetWidth() - 5);
 			}else if (stairs[i].GetID() == 1) {
@@ -83,7 +78,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			} else if (stairs[i].GetID() == 3) {
 				player.SetTopLeft(player.GetLeft() + 5, stairs[i].Gety() - player.GetWidth() - 5);
 			} else if (stairs[i].GetID() == 4) {
-				fakeStairActivated = true;
+				stairs[i].SetHidden(true);
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetID() == 5) {
 				player.SetTopLeft(player.GetLeft(), stairs[i].Gety() - player.GetWidth() - 5);
@@ -139,16 +134,16 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	// 天花板
 	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
 	ceiling.SetTopLeft(100, 150);
-	
+
+	// 石階
 	srand(size_t(time(NULL)));
 	for (size_t i = 0; i < 9; i++) 
 	{
 		UpdateStairs block;
-		size_t x = rand() % (max_x - min_x + 1) + min_x;
+		const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 		block.SetID(0); // init 9 normal blocks
 		block.Getpicture();
-		// block.Setxy(400, 400);
-		block.Setxy(x, 400 + i * 150);
+		block.Setxy(random_x, 400 + i * 150);
 		stairs.push_back(block);
 		// 400 620 740 860, max = 850
 	}
@@ -236,14 +231,11 @@ void CGameStateRun::OnShow()
 	{
 		wall[i].ShowBitmap();
 	}
-	for (size_t i = 0; i < stairs.size(); i++)
-	{
-		if (CMovingBitmap::IsOverlap(stairs[i].Getpicture(), background)) 
-		{
-			stairs[i].Getpicture().ShowBitmap();
+	for (auto& stair : stairs) {
+		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
+			stair.Getpicture().ShowBitmap();
 		}
 	}
-	
 	if (CMovingBitmap::IsOverlap(player, background))
 	{
 		player.ShowBitmap();
@@ -251,6 +243,16 @@ void CGameStateRun::OnShow()
 	if (player.GetTop() > 850 || life == 0)
 	{
 		GotoGameState(GAME_STATE_OVER);
+		stairs.clear();
+		for (size_t i = 0; i < 9; i++) 
+		{
+			UpdateStairs block;
+			int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
+			block.SetID(0); // 初始化九?普通石?
+			block.Getpicture();
+			block.Setxy(random_x, 400 + i * 150);
+			stairs.push_back(block);
+		}
 		player.SetTopLeft(450, 180);
 		lbKeyPressed = false;
 		rbKeyPressed = false;
@@ -268,11 +270,11 @@ void CGameStateRun::draw_text()
 	life_text = "Life " + std::to_string(life);
 	CTextDraw::Print(pDC, 900, 150, life_text);
 
-	// // print HI
-	// CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-	// std::string HI_text;
-	// HI_text = "HI " + std::to_string((HI));
-	// CTextDraw::Print(pDC, 900, 200, HI_text);
+	// print HI
+	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	std::string HI_text;
+	HI_text = "HI " + std::to_string((HI));
+	CTextDraw::Print(pDC, 900, 200, HI_text);
 	
 	CDDraw::ReleaseBackCDC();
 }
