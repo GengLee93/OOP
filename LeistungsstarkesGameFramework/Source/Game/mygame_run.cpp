@@ -11,6 +11,7 @@
 #include <time.h>
 #include <string>
 #include <random>
+#include <chrono>
 
 #include "UpdateStairs.h"
 
@@ -231,6 +232,7 @@ void CGameStateRun::OnShow()
 	{
 		wall[i].ShowBitmap();
 	}
+
 	for (auto& stair : stairs) {
 		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
 			stair.Getpicture().ShowBitmap();
@@ -257,6 +259,7 @@ void CGameStateRun::OnShow()
 		lbKeyPressed = false;
 		rbKeyPressed = false;
 		life = 10;
+		gy = 0;
 	}
 }
 
