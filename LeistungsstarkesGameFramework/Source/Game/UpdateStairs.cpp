@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "UpdateStairs.h"
+#include <atomic>
+
+UpdateStairs::UpdateStairs() {}
 
 
-UpdateStairs::UpdateStairs() : id(0), isHidden(false), x(x), y(y) {}
-
- 
 CMovingBitmap UpdateStairs::Getpicture()
 {
     return spicture;

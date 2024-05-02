@@ -17,7 +17,7 @@ private:
         "Resources/trampoline2.bmp"
     };
     CMovingBitmap spicture;
-    size_t id;              // ¹Ï¤ù½s¸¹
+    size_t id;     
     bool isHidden = false;
     int x;
     int y;
