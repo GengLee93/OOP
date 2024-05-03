@@ -24,8 +24,8 @@ using namespace game_framework;
 
 constexpr size_t min_stairs_id = 0;
 constexpr size_t max_stairs_id = 5;
-constexpr size_t min_x_coordinate  = 150;
-constexpr size_t max_x_coordinate = 630;
+constexpr size_t min_x_coordinate = 150;
+constexpr size_t max_x_coordinate = 610;
 
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -129,22 +129,22 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 {
-	// 遊戲背景
+	// game background
 	background.LoadBitmapByString({"Resources/background.bmp"});
 	background.SetTopLeft(100, 150);
 	
-	// 牆
+	// wall
 	for (size_t i = 0; i < 2; i++)
 	{
 		wall[i].LoadBitmapByString({"Resources/wall.bmp"});
 		wall[i].SetTopLeft(75 + 700 * i, 150);
 	}
 
-	// 天花板
+	// ceiling
 	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
 	ceiling.SetTopLeft(100, 150);
 
-	// 石階
+	// stairs
 	srand(size_t(time(NULL)));
 	for (size_t i = 0; i < 9; i++) 
 	{
@@ -259,7 +259,7 @@ void CGameStateRun::OnShow()
 		{
 			UpdateStairs block;
 			int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
-			block.SetID(0); // 初始化九?普通石?
+			block.SetID(0);
 			block.Getpicture();
 			block.Setxy(random_x, 400 + i * 150);
 			stairs.push_back(block);
