@@ -17,7 +17,7 @@ private:
         "Resources/trampoline2.bmp"
     };
     CMovingBitmap spicture;
-    size_t id;     
+    unsigned id;     
     bool isHidden = false;
     int x;
     int y;
@@ -26,11 +26,11 @@ public:
     UpdateStairs();
     
     CMovingBitmap Getpicture();
-    void SetID(size_t new_id);
+    void SetID(unsigned new_id);
     void SetHidden(bool isHidden);
     void Setxy(int new_x, int new_y);
     int Getx();
     int Gety();
-    size_t GetID();
+    unsigned GetID();
     bool GetHidden();
 };

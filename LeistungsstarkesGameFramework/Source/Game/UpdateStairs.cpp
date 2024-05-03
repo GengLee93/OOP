@@ -10,7 +10,7 @@ CMovingBitmap UpdateStairs::Getpicture()
     return spicture;
 }
 
-void UpdateStairs::SetID(size_t new_id)
+void UpdateStairs::SetID(unsigned new_id)
 {
     this->id = new_id;
     if (id < 6)
@@ -32,7 +32,7 @@ void UpdateStairs::Setxy(int new_x, int new_y)
 }
 
 
-size_t UpdateStairs::GetID()
+unsigned UpdateStairs::GetID()
 {
     return this->id;
 }

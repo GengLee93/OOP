@@ -21,8 +21,8 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-constexpr size_t min_stairs_id = 0;
-constexpr size_t max_stairs_id = 5;
+// constexpr size_t min_stairs_id = 0;
+// constexpr size_t max_stairs_id = 5;
 constexpr size_t min_x_coordinate = 150;
 constexpr size_t max_x_coordinate = 610;
 
@@ -45,13 +45,18 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	
 	for (int i = 0; i < 9; ++i)
 	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::vector<double> probabilities = {0.8, 0, 0.1, 0.1, 0, 0};
+		std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - 3);
 	
 		//  generate stairs
 		if (stairs[i].Gety() < 180)
 		{
 			UpdateStairs block;
-			block.SetID(rand() % (max_stairs_id - min_stairs_id + 1) + min_stairs_id);
+			// block.SetID(rand() % (max_stairs_id - min_stairs_id + 1) + min_stairs_id);
+			block.SetID(dis(gen));
 			const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 			stairs[i] = block;
 			stairs[i].Setxy(random_x, 1500);
