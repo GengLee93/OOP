@@ -12,6 +12,7 @@
 #include <string>
 #include <random>
 #include <chrono>
+#include <thread>
 
 #include "UpdateStairs.h"
 
@@ -54,12 +55,18 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		//  generate stairs
 		if (stairs[i].Gety() < 180)
 		{
+			score += 1;
+			if((score % 8 == 0) & (life < 5))
+			{
+				life += 1;
+			}
 			UpdateStairs block;
 			// block.SetID(rand() % (max_stairs_id - min_stairs_id + 1) + min_stairs_id);
 			block.SetID(dis(gen));
 			const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 			stairs[i] = block;
 			stairs[i].Setxy(random_x, 1500);
+			
 		}
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
@@ -88,9 +95,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetID() == 5) {
 				player.SetTopLeft(player.GetLeft(), stairs[i].Gety() - player.GetWidth() - 5);
-				gy = -11;
+				gy = -10;
 			}
 		}
+		
 	}
 	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
 
@@ -158,7 +166,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
 
-	life = 10;
+	life = 5;
+	score = 0;
 }
 	
 
@@ -249,7 +258,7 @@ void CGameStateRun::OnShow()
 	}
 	if (player.GetTop() > 850 || life == 0)
 	{
-		GotoGameState(GAME_STATE_OVER);
+		
 		stairs.clear();
 		for (size_t i = 0; i < 9; i++) 
 		{
@@ -263,8 +272,10 @@ void CGameStateRun::OnShow()
 		player.SetTopLeft(450, 180);
 		lbKeyPressed = false;
 		rbKeyPressed = false;
-		life = 10;
+		life = 5;
 		gy = 0;
+		score = 0;
+		GotoGameState(GAME_STATE_OVER);
 	}
 }
 
@@ -281,11 +292,14 @@ void CGameStateRun::draw_text()
 	// print HI
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 	std::string HI_text;
-	HI_text = "HI " + std::to_string((HI));
+	HI = score;
+	HI_text = "score " + std::to_string((HI));
 	CTextDraw::Print(pDC, 900, 200, HI_text);
 	
 	CDDraw::ReleaseBackCDC();
 }
+
+
 
 
 	
