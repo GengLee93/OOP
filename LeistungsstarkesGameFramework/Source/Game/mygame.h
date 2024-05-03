@@ -104,8 +104,7 @@ namespace game_framework {
 		CMovingBitmap conveyor_right; //向右傳送帶
 		CMovingBitmap wall[2];
 		CMovingBitmap trampoline; // 彈簧
-		size_t life = 10;
-		size_t HI; // 最高紀錄
+		size_t life = 10; 
 		bool touchnail = false;
 		int samenail = 10;
 		int samenail2 = 10;
@@ -117,6 +116,8 @@ namespace game_framework {
 		bool rbKeyPressed = false;
 		bool lbKeyPressed = false;
 		int vy = 0; int gy = 0;
+		unsigned score;
+		
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

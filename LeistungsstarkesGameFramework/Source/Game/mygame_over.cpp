@@ -46,9 +46,10 @@ void CGameStateOver::draw_text()
 	CTextDraw::Print(pDC, 290, 228, "結束");
 
 	/* Print info */
-	CTextDraw::ChangeFontLog(pDC,  34, "微軟正黑體", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 282, 431, "分數:");
-
+	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	std::string HI_text;
+	HI_text = "score " + std::to_string(HI);
+	CTextDraw::Print(pDC, 290, 600, HI_text);
 	CDDraw::ReleaseBackCDC();
 	
 }

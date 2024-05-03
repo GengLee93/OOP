@@ -28,6 +28,7 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 
 	CGame CGame::instance;
+	unsigned CGameStateRun::HI;
 
 	CGame::CGame()
 		: NUM_GAME_STATES(3)
