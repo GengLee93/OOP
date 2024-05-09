@@ -24,8 +24,8 @@ using namespace game_framework;
 
 // constexpr size_t min_stairs_id = 0;
 // constexpr size_t max_stairs_id = 5;
-constexpr size_t min_x_coordinate = 150;
-constexpr size_t max_x_coordinate = 610;
+constexpr unsigned min_x_coordinate = 150;
+constexpr unsigned max_x_coordinate = 610;
 
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -43,7 +43,14 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	
+	// // 關卡選擇
+	// switch (selectLevel)
+	// {
+	// 	case 1:
+	// 		break;
+	// 	case 2:
+	// 		break;	
+	// }
 	for (int i = 0; i < 9; ++i)
 	{
 		std::random_device rd;
@@ -61,12 +68,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				life += 1;
 			}
 			UpdateStairs block;
-			// block.SetID(rand() % (max_stairs_id - min_stairs_id + 1) + min_stairs_id);
 			block.SetID(dis(gen));
 			const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 			stairs[i] = block;
 			stairs[i].Setxy(random_x, 1500);
-			
 		}
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
@@ -101,21 +106,16 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		
 	}
 	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
-
-	// when life=0 or player is overlaping with ceiling, the game is over
 	touchcei2  = touchcei;
 	touchcei = CMovingBitmap::IsOverlap(player,ceiling);
-	
 	if (touchcei && !touchcei2)
 	{
 		player.SetTopLeft(player.GetLeft(),player.GetTop()+150);
 		gy = 1;
 		life -= 1;
-		
-		// 尚未解決如何從mygame_run 跳到 mygame_over
 	}
 	
-	// player 左右移動
+	// player movement
 	if(rbKeyPressed)
 	{
 		if( player.GetLeft() <= 720 )
@@ -150,7 +150,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	ceiling.SetTopLeft(100, 150);
 
 	// stairs
-	srand(size_t(time(NULL)));
+	srand(unsigned(time(NULL)));
 	for (size_t i = 0; i < 9; i++) 
 	{
 		UpdateStairs block;
@@ -159,13 +159,11 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Getpicture();
 		block.Setxy(random_x, 400 + i * 150);
 		stairs.push_back(block);
-		// 400 620 740 860, max = 850
 	}
 	
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
-
 	life = 5;
 	score = 0;
 }
@@ -260,7 +258,7 @@ void CGameStateRun::OnShow()
 	{
 		
 		stairs.clear();
-		for (size_t i = 0; i < 9; i++) 
+		for (size_t i = 0; i < 9; i++)
 		{
 			UpdateStairs block;
 			int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;

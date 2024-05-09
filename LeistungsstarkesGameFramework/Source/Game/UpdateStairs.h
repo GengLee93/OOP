@@ -6,7 +6,7 @@
 
 using namespace game_framework;
 
-class UpdateStairs : public CMovingBitmap {
+class UpdateStairs {
 private:
     std::vector<std::string> stairs_image = {
         "Resources/normal.bmp",

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "UpdateStairs.h"
-#include <atomic>
 
 UpdateStairs::UpdateStairs() {}
 
