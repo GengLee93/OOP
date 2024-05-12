@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../Library/gameutil.h"
+#include "UpdateStairs.h"
 
 using namespace game_framework;
 

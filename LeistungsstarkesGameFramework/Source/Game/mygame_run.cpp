@@ -22,8 +22,6 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-// constexpr size_t min_stairs_id = 0;
-// constexpr size_t max_stairs_id = 5;
 constexpr unsigned min_x_coordinate = 150;
 constexpr unsigned max_x_coordinate = 610;
 
@@ -55,7 +53,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::vector<double> probabilities = {0.8, 0, 0.1, 0.1, 0, 0};
+		std::vector<double> probabilities = {0.5, 0.15, 0.1, 0.1, 0.1, 0.05};
 		std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - 3);
 	
@@ -244,7 +242,6 @@ void CGameStateRun::OnShow()
 	{
 		wall[i].ShowBitmap();
 	}
-
 	for (auto& stair : stairs) {
 		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
 			stair.Getpicture().ShowBitmap();
@@ -256,7 +253,6 @@ void CGameStateRun::OnShow()
 	}
 	if (player.GetTop() > 850 || life == 0)
 	{
-		
 		stairs.clear();
 		for (size_t i = 0; i < 9; i++)
 		{
