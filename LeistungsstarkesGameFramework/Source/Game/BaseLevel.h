@@ -10,10 +10,12 @@ using namespace game_framework;
 class BaseLevel
 {
 private:
-    double stairs_probability[6];
-    int stairs_speed;
+    std::vector<double> stairs_probability;
+    int stairs_speed = 1;
 public:
-    BaseLevel(const double* stairs_probability, int stairs_speed);
-    virtual ~BaseLevel(){}
-    virtual void startGame() = 0;
+    BaseLevel();
+    
+    void SetLevel(int h);
+    unsigned GetSpeed();
+    vector<double> GetStairsProbability();
 };

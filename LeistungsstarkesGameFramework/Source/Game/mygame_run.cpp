@@ -15,6 +15,7 @@
 #include <thread>
 
 #include "UpdateStairs.h"
+#include "BaseLevel.h"
 
 using namespace game_framework;
 
@@ -41,20 +42,19 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	// // 關卡選擇
-	// switch (selectLevel)
-	// {
-	// 	case 1:
-	// 		break;
-	// 	case 2:
-	// 		break;	
-	// }
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::vector<double> probabilities;
+	std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
+	
+	// choose level
+	selectLevel = 2;
+	BaseLevel choose_level;
+	choose_level.SetLevel(selectLevel);
+	probabilities = choose_level.GetStairsProbability();
+	
 	for (int i = 0; i < 9; ++i)
 	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::vector<double> probabilities = {0.5, 0.15, 0.1, 0.1, 0.1, 0.05};
-		std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - 3);
 	
 		//  generate stairs
