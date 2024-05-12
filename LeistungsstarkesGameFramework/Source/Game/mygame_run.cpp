@@ -45,19 +45,19 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<double> probabilities;
-	std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 	
 	// choose level
-	selectLevel = 2;
+	select_level = 6;
 	BaseLevel choose_level;
-	choose_level.SetLevel(selectLevel);
+	choose_level.SetLevel(select_level);
 	probabilities = choose_level.GetStairsProbability();
+	std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 	
 	for (int i = 0; i < 9; ++i)
 	{
-		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - 3);
+		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - choose_level.GetSpeed());
 	
-		//  generate stairs
+		//  generate  stairs
 		if (stairs[i].Gety() < 180)
 		{
 			score += 1;
@@ -71,17 +71,18 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			stairs[i] = block;
 			stairs[i].Setxy(random_x, 1500);
 		}
+		
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
-			vy = 0;
-			gy = 0;
+			velocity_y = 0;
+			gravity_y = 0;
 			if (stairs[i].GetID() == 0) {
 				player.SetTopLeft(player.GetLeft(), stairs[i].Gety()- player.GetWidth() - 5);
 			}else if (stairs[i].GetID() == 1) {
-				samenail2 = samenail;
-				samenail = i;
+				same_nail2 = same_nail;
+				same_nail = i;
 				touchnail = true;
-				if(samenail == samenail2 || samenail == 10 ) {
+				if(same_nail == same_nail2 || same_nail == 10 ) {
 					touchnail = false;
 				}
 				if (touchnail) {
@@ -98,35 +99,35 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				player.SetTopLeft(player.GetLeft(), player.GetTop() + 2);
 			}else if (stairs[i].GetID() == 5) {
 				player.SetTopLeft(player.GetLeft(), stairs[i].Gety() - player.GetWidth() - 5);
-				gy = -10;
+				gravity_y = -10;
 			}
 		}
 		
 	}
-	player.SetTopLeft(player.GetLeft(), player.GetTop() + gy);
-	touchcei2  = touchcei;
-	touchcei = CMovingBitmap::IsOverlap(player,ceiling);
-	if (touchcei && !touchcei2)
+	touching_ceiling2  = touching_ceiling;
+	touching_ceiling = CMovingBitmap::IsOverlap(player,ceiling);
+	if (touching_ceiling && !touching_ceiling2)
 	{
 		player.SetTopLeft(player.GetLeft(),player.GetTop()+150);
-		gy = 1;
+		gravity_y = 1;
 		life -= 1;
 	}
 	
 	// player movement
-	if(rbKeyPressed)
+	player.SetTopLeft(player.GetLeft(), player.GetTop() + gravity_y);
+	if(right_key_pressed)
 	{
-		if( player.GetLeft() <= 720 )
+		if( player.GetLeft() <= 720)
 			player.SetTopLeft(player.GetLeft() + 9,player.GetTop());
 	}
-	else if (lbKeyPressed){
-		if(player.GetLeft() >= 100  )
+	else if (left_key_pressed){
+		if(player.GetLeft() >= 100)
 			player.SetTopLeft(player.GetLeft() - 9,player.GetTop());
 	}
-	vy += 1;
-	if (vy % 2 == 0)
+	velocity_y += 1;
+	if (velocity_y % 2 == 0)
 	{
-		gy += 1;
+		gravity_y += 1;
 	}
 }
 
@@ -139,8 +140,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	// wall
 	for (size_t i = 0; i < 2; i++)
 	{
-		wall[i].LoadBitmapByString({"Resources/wall.bmp"});
-		wall[i].SetTopLeft(75 + 700 * i, 150);
+		walls[i].LoadBitmapByString({"Resources/wall.bmp"});
+		walls[i].SetTopLeft(75 + 700 * i, 150);
 	}
 
 	// ceiling
@@ -158,12 +159,11 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Setxy(random_x, 400 + i * 150);
 		stairs.push_back(block);
 	}
-	
+
+	// player
 	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
-	life = 5;
-	score = 0;
 }
 	
 
@@ -173,7 +173,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	switch (nChar)
 	{
 		case VK_LEFT:
-			lbKeyPressed = true;
+			left_key_pressed = true;
 			if(player.GetImageFileName() == "Resources/p4.bmp")
 			{
 				player.SetFrameIndexOfBitmap(4);
@@ -184,7 +184,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 		case VK_RIGHT:
-			rbKeyPressed = true;
+			right_key_pressed = true;
 			if(player.GetImageFileName() == "Resources/p2.bmp")
 			{
 				player.SetFrameIndexOfBitmap(2);
@@ -203,10 +203,10 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	switch (nChar)
 	{
 	case VK_LEFT:
-		lbKeyPressed = false;
+		left_key_pressed = false;
 		break;
 	case VK_RIGHT:
-		rbKeyPressed = false;
+		right_key_pressed = false;
 		break;
 	}
 	player.SetFrameIndexOfBitmap(0);
@@ -238,11 +238,16 @@ void CGameStateRun::OnShow()
 	
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
-	for (size_t i = 0; i < 2; i++)
+	for (auto& wall : walls)
 	{
-		wall[i].ShowBitmap();
+		wall.ShowBitmap();
 	}
 	for (auto& stair : stairs) {
+		/*
+			In UpdateStairs.h, SetHidden() is initialized as false.
+			When the player collides with a fake stair, it becomes True.
+			This remains True until the next time the fake stair is re-initialized.
+		*/
 		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
 			stair.Getpicture().ShowBitmap();
 		}
@@ -251,26 +256,33 @@ void CGameStateRun::OnShow()
 	{
 		player.ShowBitmap();
 	}
+
+	// restart
 	if (player.GetTop() > 850 || life == 0)
 	{
-		stairs.clear();
-		for (size_t i = 0; i < 9; i++)
-		{
-			UpdateStairs block;
-			int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
-			block.SetID(0);
-			block.Getpicture();
-			block.Setxy(random_x, 400 + i * 150);
-			stairs.push_back(block);
-		}
-		player.SetTopLeft(450, 180);
-		lbKeyPressed = false;
-		rbKeyPressed = false;
-		life = 5;
-		gy = 0;
-		score = 0;
-		GotoGameState(GAME_STATE_OVER);
+		restart_game();
 	}
+}
+
+void CGameStateRun::restart_game()
+{
+	stairs.clear();
+	for (int i = 0; i < 9; i++)
+	{
+		UpdateStairs block;
+		int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
+		block.SetID(0);
+		block.Getpicture();
+		block.Setxy(random_x, 400 + i * 150);
+		stairs.push_back(block);
+	}
+	player.SetTopLeft(450, 180);
+	left_key_pressed = false;
+	right_key_pressed = false;
+	life = 5;
+	gravity_y = 0;
+	score = 0;
+	GotoGameState(GAME_STATE_OVER);
 }
 
 void CGameStateRun::draw_text()
@@ -292,6 +304,8 @@ void CGameStateRun::draw_text()
 	
 	CDDraw::ReleaseBackCDC();
 }
+
+
 
 
 

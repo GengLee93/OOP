@@ -15,7 +15,7 @@ private:
 public:
     BaseLevel();
     
-    void SetLevel(int h);
+    void SetLevel(int level);
     unsigned GetSpeed();
     vector<double> GetStairsProbability();
 };

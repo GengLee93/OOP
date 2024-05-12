@@ -89,12 +89,14 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		int selectLevel;
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		void draw_text();
+		void restart_game();
+		
+		// initialize map
 		CMovingBitmap background;
 		CMovingBitmap ceiling; // 天花板
 		CMovingBitmap nails; // 地刺
@@ -103,21 +105,26 @@ namespace game_framework {
 		CMovingBitmap fake; // 假磚塊
 		CMovingBitmap conveyor_left; //向左傳送帶
 		CMovingBitmap conveyor_right; //向右傳送帶
-		CMovingBitmap wall[2];
+		CMovingBitmap walls[2];
 		CMovingBitmap trampoline; // 彈簧
-		size_t life = 10; 
-		bool touchnail = false;
-		int samenail = 10;
-		int samenail2 = 10;
-		bool touchcei = 0;
-		bool touchcei2 = 0;
-		bool touchcei3 = 0;
 		std::vector<UpdateStairs> stairs;
+
+		// initialize player
 		std::vector<CMovingBitmap> players;
-		bool rbKeyPressed = false;
-		bool lbKeyPressed = false;
-		int vy = 0; int gy = 0;
-		unsigned score;
+		int life = 5;
+		int score = 0;
+		int select_level;
+
+		// player and stairs' logic
+		bool touchnail = false;
+		int same_nail = 10;
+		int same_nail2 = 10;
+		bool touching_ceiling = false;
+		bool touching_ceiling2 = false;
+		bool left_key_pressed = false;
+		bool right_key_pressed = false;
+		int velocity_y = 0;
+		int gravity_y = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
