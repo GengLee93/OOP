@@ -47,15 +47,14 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	std::vector<double> probabilities;
 	
 	// choose level
-	select_level = 6;
-	BaseLevel choose_level;
-	choose_level.SetLevel(select_level);
-	probabilities = choose_level.GetStairsProbability();
+	BaseLevel level;
+	level.SetLevel(select_level);
+	probabilities = level.GetStairsProbability();
 	std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
 	
 	for (int i = 0; i < 9; ++i)
 	{
-		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - choose_level.GetSpeed());
+		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - level.GetSpeed());
 	
 		//  generate  stairs
 		if (stairs[i].Gety() < 180)
@@ -138,7 +137,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	background.SetTopLeft(100, 150);
 	
 	// wall
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 	{
 		walls[i].LoadBitmapByString({"Resources/wall.bmp"});
 		walls[i].SetTopLeft(75 + 700 * i, 150);
@@ -270,7 +269,7 @@ void CGameStateRun::restart_game()
 	for (int i = 0; i < 9; i++)
 	{
 		UpdateStairs block;
-		int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
+		const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 		block.SetID(0);
 		block.Getpicture();
 		block.Setxy(random_x, 400 + i * 150);

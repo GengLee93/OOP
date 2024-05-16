@@ -11,11 +11,13 @@ class BaseLevel
 {
 private:
     std::vector<double> stairs_probability;
-    int stairs_speed = 1;
+    int stairs_speed;
+    int select_level;
 public:
     BaseLevel();
     
     void SetLevel(int level);
     unsigned GetSpeed();
     vector<double> GetStairsProbability();
+    int GetLevel();
 };

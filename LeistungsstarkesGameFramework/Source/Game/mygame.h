@@ -68,7 +68,9 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		void draw_text();
+		bool is_overlap(CMovingBitmap bitmap, CPoint point);
 		CMovingBitmap logo;								// csie的logo
+		CMovingBitmap levels[7];
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -113,7 +115,6 @@ namespace game_framework {
 		std::vector<CMovingBitmap> players;
 		int life = 5;
 		int score = 0;
-		int select_level;
 
 		// player and stairs' logic
 		bool touchnail = false;
