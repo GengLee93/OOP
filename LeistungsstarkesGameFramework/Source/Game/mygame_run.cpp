@@ -288,11 +288,11 @@ void CGameStateRun::draw_text()
 {
 	CDC *pDC = CDDraw::GetBackCDC();
 	
-	// print life
+	// print HI
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-	std::string life_text;
-	life_text = "Life " + std::to_string(life);
-	CTextDraw::Print(pDC, 900, 150, life_text);
+	std::string level;
+	level = "Level " + std::to_string(select_level);
+	CTextDraw::Print(pDC, 900, 150, level);
 
 	// print HI
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
@@ -300,6 +300,12 @@ void CGameStateRun::draw_text()
 	HI = score;
 	HI_text = "score " + std::to_string((HI));
 	CTextDraw::Print(pDC, 900, 200, HI_text);
+	
+	// print life
+	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	std::string life_text;
+	life_text = "Life " + std::to_string(life);
+	CTextDraw::Print(pDC, 900, 250, life_text);
 	
 	CDDraw::ReleaseBackCDC();
 }
