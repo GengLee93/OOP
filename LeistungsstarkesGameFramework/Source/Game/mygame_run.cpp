@@ -25,9 +25,15 @@ using namespace game_framework;
 
 constexpr unsigned min_x_coordinate = 150;
 constexpr unsigned max_x_coordinate = 610;
+std::vector<std::string> coins_images = {
+	"Resources/coin1.bmp",
+	"Resources/coin2.bmp",
+	"Resources/coin3.bmp",
+	"Resources/coin4.bmp",
+	"Resources/coin1.bmp"
+};
 
-
-CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
+CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)		
 {
 }
 
@@ -159,8 +165,20 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		stairs.push_back(block);
 	}
 
+	// coins
+	coin.LoadBitmapByString({
+		"Resources/coin1.bmp",
+		"Resources/coin2.bmp",
+		"Resources/coin3.bmp",
+		"Resources/coin4.bmp",
+		"Resources/coin5.bmp",
+		"Resources/coin6.bmp",
+		"Resources/coin7.bmp"
+	}, RGB(255, 255, 255));
+	coin.SetAnimation(1, 0);
+
 	// player
-	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"},RGB(255, 255, 255));
+	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"}, RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
 }
@@ -248,6 +266,7 @@ void CGameStateRun::OnShow()
 			When the player collides with a fake stair, it becomes True.
 			This remains True until the next time the fake stair is re-initialized.
 		*/
+		if (CMovingBitmap::IsOverlap(player, coin))
 		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
 			stair.Getpicture().ShowBitmap();
 		}
