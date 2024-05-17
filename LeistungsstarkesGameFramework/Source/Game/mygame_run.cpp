@@ -133,7 +133,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 {
 	// game background
-	background.LoadBitmapByString({"Resources/background.bmp"});
+	background.LoadBitmapByString({"Resources/background.bmp","Resources/ocean.bmp","Resources/whie.bmp","Resources/mount.bmp","Resources/lr.bmp","Resources/uiverse.bmp"});
 	background.SetTopLeft(100, 150);
 	
 	// wall
@@ -235,6 +235,7 @@ void CGameStateRun::OnShow()
 {
 	draw_text();
 	
+	background.SetFrameIndexOfBitmap(select_level - 1);
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
 	for (auto& wall : walls)
