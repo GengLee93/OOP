@@ -48,7 +48,7 @@ void CGameStateOver::draw_text()
 	/* Print info */
 	CTextDraw::ChangeFontLog(pDC, 30, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
 	std::string HI_text;
-	HI_text = "score " + std::to_string(HI);
+	HI_text = "Score " + std::to_string(HI);
 	CTextDraw::Print(pDC, 290, 600, HI_text);
 	CDDraw::ReleaseBackCDC();
 	

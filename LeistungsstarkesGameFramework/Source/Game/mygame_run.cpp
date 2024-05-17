@@ -289,7 +289,7 @@ void CGameStateRun::draw_text()
 {
 	CDC *pDC = CDDraw::GetBackCDC();
 	
-	// print HI
+	// print Level
 	CTextDraw::ChangeFontLog(pDC, 30, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
 	std::string level;
 	level = "Level " + std::to_string(select_level);

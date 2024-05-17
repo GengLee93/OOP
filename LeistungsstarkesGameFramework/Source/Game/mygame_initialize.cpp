@@ -47,7 +47,6 @@ void CGameStateInit::OnInit()
 	//
 	// 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
 	//
-	
 }
 
 void CGameStateInit::OnBeginState()
