@@ -56,10 +56,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	for (int i = 0; i < 9; ++i)
 	{
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - level.GetSpeed());
-		// if (select_level == 7)
-		// {
-		// 	coins[i].Setxy(coins[i].Getx(), coins[i].Gety() - level.GetSpeed());
-		// }
+		if (select_level == 7)
+		{
+			coins[i].Setxy(350, i * 50);
+		}
 		
 		// generate stairs
 		if (stairs[i].Gety() < 180)
@@ -73,13 +73,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			block.SetID(dis(gen));
 			stairs[i] = block;
 			stairs[i].Setxy(dis_x(gen), 1500);
-			if (coins[i].Gety() < 180)
-			{
-				UpdateCoins coin;
-				coin.SetID(6);
-				coins[i] = coin;
-				coins[i].Setxy(block.Getx() + 50, block.Gety() - 10);
-			}
+		}
+
+		if (coins[i].Getpicture().GetTop() < 180)
+		{
+			
 		}
 
 		
@@ -178,11 +176,11 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
 		
-		UpdateCoins coin;
-		coin.SetID(7); // init 9 coins
-		coin.Getpicture();
-		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
-		coins.push_back(coin);
+		 UpdateCoins coin;
+		 coin.LoadCoin();
+		 coin.Getpicture().SetAnimation(50,false);
+		 coin.Setxy(350, 350);
+		 coins.push_back(coin);
 	}
 
 	// player
@@ -286,12 +284,9 @@ void CGameStateRun::OnShow()
 	}
 	if (select_level == 7)
 	{
-		for (auto& coin : coins)
+		for (unsigned i = 0; i < 9; i++)
 		{
-			if (CMovingBitmap::IsOverlap(coin.Getpicture(), background) && !coin.GetHidden())
-			{
-				coin.Getpicture().ShowBitmap();
-			}
+			coins[i].Getpicture().ShowBitmap();
 		}
 	}
 	if (CMovingBitmap::IsOverlap(player, background))
@@ -309,7 +304,7 @@ void CGameStateRun::OnShow()
 void CGameStateRun::restart_game()
 {
 	stairs.clear();
-	coins.clear();
+	// coins.clear();
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	for (int i = 0; i < 9; i++)
@@ -320,10 +315,10 @@ void CGameStateRun::restart_game()
 		block.Getpicture();
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
-
+		
 		UpdateCoins coin;
-		coin.SetID(7); // init 9 coins
-		coin.Getpicture();
+		coin.LoadCoin();
+		coin.Getpicture().SetAnimation(50, false);
 		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
 		coins.push_back(coin);
 	}

@@ -39,6 +39,7 @@
 */
 
 #include "UpdateStairs.h"
+#include "UpdateCoins.h"
 
 
 namespace game_framework {
@@ -110,7 +111,7 @@ namespace game_framework {
 		CMovingBitmap walls[2];
 		CMovingBitmap trampoline; // ¼uÂ®
 		std::vector<UpdateStairs> stairs;
-		std::vector<UpdateStairs> coins;
+		std::vector<UpdateCoins> coins;
 		
 
 		// initialize player
