@@ -113,7 +113,6 @@ namespace game_framework {
 		std::vector<UpdateStairs> stairs;
 		std::vector<UpdateCoins> coins;
 		CMovingBitmap coin_mark;
-		
 
 		// initialize player
 		int life = 5;
@@ -130,6 +129,9 @@ namespace game_framework {
 		bool right_key_pressed = false;
 		int velocity_y = 0;
 		int gravity_y = 0;
+		// coin
+		bool k = false;
+		int wait = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

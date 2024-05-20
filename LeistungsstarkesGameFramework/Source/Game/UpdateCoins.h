@@ -27,4 +27,5 @@ public:
     CMovingBitmap Getpicture();
     void Setxy(int new_x, int new_y);
     void LoadCoin();
+    void ismove(bool s);
 };

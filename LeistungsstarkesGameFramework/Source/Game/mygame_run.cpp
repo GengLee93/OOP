@@ -13,6 +13,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <ctime>
 
 #include "UpdateStairs.h"
 #include "UpdateCoins.h"
@@ -40,10 +41,6 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	if (select_level == 7)
-	{
-		coin_mark.SetTopLeft(coin_mark.GetLeft(), coin_mark.GetHeight() + 1);
-	} 
 	
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -60,10 +57,16 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	
 	for (int i = 0; i < 9; ++i)
 	{
+		
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - level.GetSpeed());
-		if (select_level == 7)
+		if (select_level == 7  ) 
 		{
-			coins[i].Setxy(350, i * 50);
+			coin_mark.SetTopLeft(stairs[6].Getx() + 30 ,stairs[6].Gety() - 40);
+		}
+		if(CMovingBitmap::IsOverlap(player,coin_mark))
+		{
+			k = 1;
+			coin_point += 1;
 		}
 		
 		// generate stairs
@@ -78,11 +81,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			block.SetID(dis(gen));
 			stairs[i] = block;
 			stairs[i].Setxy(dis_x(gen), 1500);
-		}
-
-		if (coins[i].Getpicture().GetTop() < 180)
-		{
-			
 		}
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
@@ -142,6 +140,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		gravity_y += 1;
 	}
+	
+	wait += 1;
+	if(wait %45 == 38)
+	{
+		k = 0;
+		wait = 0; 
+	}
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
@@ -181,7 +186,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		
 		UpdateCoins coin;
 		coin.LoadCoin();
-		coin.Getpicture().SetAnimation(50,false);
+		coin.Setxy(300,300);
+		coin.ismove(1);
 		coins.push_back(coin);
 	}
 	coin_mark.LoadBitmapByString({
@@ -192,9 +198,10 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 			"Resources/coin5.bmp",
 			"Resources/coin6.bmp",
 			"Resources/coin7.bmp"
-		}, RGB(0, 0, 0));
+		}, RGB(255, 255, 255));
 	coin_mark.SetAnimation(50, false);
-	coin_mark.SetTopLeft(900, 300);
+	 coin_mark.SetTopLeft(90,90 );
+	
 	
 	// player
 	player.LoadBitmapByString({
@@ -295,13 +302,15 @@ void CGameStateRun::OnShow()
 			stair.Getpicture().ShowBitmap();
 		}
 	}
-	if (select_level == 7)
+	if (select_level == 7 )
 	{
-		for(auto& coin : coins)
-		{
-			coin.Getpicture().ShowBitmap();
-		}
-		coin_mark.ShowBitmap();
+		 //for(auto& coin : coins)
+		// // {
+		// coins[0].ismove(1);
+		// coins[0].Getpicture().ShowBitmap();
+		 // }
+		if(k == 0)
+			coin_mark.ShowBitmap();
 	}
 	
 	
@@ -346,6 +355,8 @@ void CGameStateRun::restart_game()
 	gravity_y = 0;
 	score = 0;
 	coin_point = 0;
+	wait =0;
+	k= false;
 	GotoGameState(GAME_STATE_OVER);
 }
 
@@ -377,7 +388,7 @@ void CGameStateRun::draw_text()
 	{
 		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 		std::string coin_text;
-		coin_text = "      " + std::to_string(coin_point) + "/9";
+		coin_text = "      " + std::to_string(coin_point) + "/1000000";
 		CTextDraw::Print(pDC, 900, 300, coin_text);
 	}
 	

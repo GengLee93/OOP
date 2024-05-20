@@ -6,20 +6,28 @@ UpdateCoins::UpdateCoins() {}
 
 CMovingBitmap UpdateCoins::Getpicture()
 {
-    return coin_picture;
+    return this->coin_picture;
 }
 
 void UpdateCoins::Setxy(int new_x, int new_y)
 {
     coin_x = new_x;
     coin_y = new_y;
-    coin_picture.SetTopLeft(coin_x, coin_y);
+    this->coin_picture.SetTopLeft(coin_x, coin_y);
 }
 
 void UpdateCoins::LoadCoin()
 {
-    coin_picture.LoadBitmapByString(coin_images, RGB(0, 0, 0));
+    coin_picture.LoadBitmapByString({this->coin_images}, RGB(255, 255, 255));
 }
+void UpdateCoins::ismove(bool s)
+{
+    if(s)
+    {
+        this->coin_picture.SetAnimation(50,false);
+    }
+}
+
 
 
 
