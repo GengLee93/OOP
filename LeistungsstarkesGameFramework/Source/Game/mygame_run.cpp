@@ -369,7 +369,6 @@ void CGameStateRun::draw_text()
 		CTextDraw::Print(pDC, 900, 300, coin_text);
 	}
 	
-	
 	CDDraw::ReleaseBackCDC();
 }
 
