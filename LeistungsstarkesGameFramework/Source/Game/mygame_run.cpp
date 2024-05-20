@@ -368,6 +368,7 @@ void CGameStateRun::draw_text()
 		coin_text = "      " + std::to_string(coin_point) + "/10";
 		CTextDraw::Print(pDC, 900, 300, coin_text);
 	}
+
 	
 	CDDraw::ReleaseBackCDC();
 }
