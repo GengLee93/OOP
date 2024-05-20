@@ -15,6 +15,7 @@
 #include <thread>
 
 #include "UpdateStairs.h"
+#include "UpdateCoins.h"
 #include "BaseLevel.h"
 
 using namespace game_framework;
@@ -23,15 +24,6 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
 
-constexpr unsigned min_x_coordinate = 150;
-constexpr unsigned max_x_coordinate = 610;
-std::vector<std::string> coins_images = {
-	"Resources/coin1.bmp",
-	"Resources/coin2.bmp",
-	"Resources/coin3.bmp",
-	"Resources/coin4.bmp",
-	"Resources/coin1.bmp"
-};
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)		
 {
@@ -51,6 +43,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<double> probabilities;
+
+	// random x
+	std::uniform_int_distribution<> dis_x(150, 610);
 	
 	// choose level
 	BaseLevel level;
@@ -61,21 +56,33 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	for (int i = 0; i < 9; ++i)
 	{
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - level.GetSpeed());
-	
-		//  generate  stairs
+		// if (select_level == 7)
+		// {
+		// 	coins[i].Setxy(coins[i].Getx(), coins[i].Gety() - level.GetSpeed());
+		// }
+		
+		// generate stairs
 		if (stairs[i].Gety() < 180)
 		{
 			score += 1;
-			if((score % 8 == 0) & (life < 5))
+			if(score % 8 == 0 && life < 5)
 			{
 				life += 1;
 			}
 			UpdateStairs block;
 			block.SetID(dis(gen));
-			const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 			stairs[i] = block;
-			stairs[i].Setxy(random_x, 1500);
+			stairs[i].Setxy(dis_x(gen), 1500);
+			if (coins[i].Gety() < 180)
+			{
+				UpdateCoins coin;
+				coin.SetID(6);
+				coins[i] = coin;
+				coins[i].Setxy(block.Getx() + 50, block.Gety() - 10);
+			}
 		}
+
+		
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
@@ -139,7 +146,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 {
 	// game background
-	background.LoadBitmapByString({"Resources/background.bmp","Resources/ocean.bmp","Resources/whie.bmp","Resources/mount.bmp","Resources/lr.bmp","Resources/uiverse.bmp"});
+	background.LoadBitmapByString({
+		"Resources/background.bmp",
+		"Resources/ocean.bmp",
+		"Resources/whie.bmp",
+		"Resources/mount.bmp",
+		"Resources/lr.bmp",
+		"Resources/uiverse.bmp"});
 	background.SetTopLeft(100, 150);
 	
 	// wall
@@ -153,32 +166,32 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 	ceiling.LoadBitmapByString({"Resources/ceiling.bmp"}, RGB(255, 255, 255));
 	ceiling.SetTopLeft(100, 150);
 
-	// stairs
-	srand(unsigned(time(NULL)));
-	for (size_t i = 0; i < 9; i++) 
+	// stairs & coin
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis_x(150, 610);
+	for (unsigned i = 0; i < 9; i++) 
 	{
 		UpdateStairs block;
-		const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 		block.SetID(0); // init 9 normal blocks
 		block.Getpicture();
-		block.Setxy(random_x, 400 + i * 150);
+		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
+		
+		UpdateCoins coin;
+		coin.SetID(7); // init 9 coins
+		coin.Getpicture();
+		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
+		coins.push_back(coin);
 	}
 
-	// coins
-	coin.LoadBitmapByString({
-		"Resources/coin1.bmp",
-		"Resources/coin2.bmp",
-		"Resources/coin3.bmp",
-		"Resources/coin4.bmp",
-		"Resources/coin5.bmp",
-		"Resources/coin6.bmp",
-		"Resources/coin7.bmp"
-	}, RGB(255, 255, 255));
-	coin.SetAnimation(1, 0);
-
 	// player
-	player.LoadBitmapByString({"Resources/p1.bmp","Resources/p2.bmp","Resources/p3.bmp","Resources/p4.bmp","Resources/p5.bmp"}, RGB(255, 255, 255));
+	player.LoadBitmapByString({
+		"Resources/p1.bmp",
+		"Resources/p2.bmp",
+		"Resources/p3.bmp",
+		"Resources/p4.bmp",
+		"Resources/p5.bmp"}, RGB(255, 255, 255));
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
 }
@@ -253,22 +266,32 @@ void CGameStateRun::OnShow()
 {
 	draw_text();
 	
-	background.SetFrameIndexOfBitmap(select_level - 1);
+	background.SetFrameIndexOfBitmap(1);
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
 	for (auto& wall : walls)
 	{
 		wall.ShowBitmap();
 	}
-	for (auto& stair : stairs) {
+	for (auto& stair : stairs)
+	{
 		/*
 			In UpdateStairs.h, SetHidden() is initialized as false.
 			When the player collides with a fake stair, it becomes True.
 			This remains True until the next time the fake stair is re-initialized.
 		*/
-		if (CMovingBitmap::IsOverlap(player, coin))
 		if (CMovingBitmap::IsOverlap(stair.Getpicture(), background) && !stair.GetHidden()) {
 			stair.Getpicture().ShowBitmap();
+		}
+	}
+	if (select_level == 7)
+	{
+		for (auto& coin : coins)
+		{
+			if (CMovingBitmap::IsOverlap(coin.Getpicture(), background) && !coin.GetHidden())
+			{
+				coin.Getpicture().ShowBitmap();
+			}
 		}
 	}
 	if (CMovingBitmap::IsOverlap(player, background))
@@ -286,14 +309,23 @@ void CGameStateRun::OnShow()
 void CGameStateRun::restart_game()
 {
 	stairs.clear();
+	coins.clear();
+	std::random_device rd;
+	std::mt19937 gen(rd());
 	for (int i = 0; i < 9; i++)
 	{
+		std::uniform_int_distribution<> dis_x(150, 610);
 		UpdateStairs block;
-		const int random_x = rand() % (max_x_coordinate - min_x_coordinate + 1) + min_x_coordinate;
 		block.SetID(0);
 		block.Getpicture();
-		block.Setxy(random_x, 400 + i * 150);
+		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
+
+		UpdateCoins coin;
+		coin.SetID(7); // init 9 coins
+		coin.Getpicture();
+		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
+		coins.push_back(coin);
 	}
 	player.SetTopLeft(450, 180);
 	left_key_pressed = false;
@@ -301,6 +333,7 @@ void CGameStateRun::restart_game()
 	life = 5;
 	gravity_y = 0;
 	score = 0;
+	coin_point = 0;
 	GotoGameState(GAME_STATE_OVER);
 }
 
@@ -326,6 +359,16 @@ void CGameStateRun::draw_text()
 	std::string life_text;
 	life_text = "Life " + std::to_string(life);
 	CTextDraw::Print(pDC, 900, 250, life_text);
+
+	// coin
+	if (select_level == 7)
+	{
+		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+		std::string coin_text;
+		coin_text = "      " + std::to_string(coin_point) + "/10";
+		CTextDraw::Print(pDC, 900, 300, coin_text);
+	}
+	
 	
 	CDDraw::ReleaseBackCDC();
 }

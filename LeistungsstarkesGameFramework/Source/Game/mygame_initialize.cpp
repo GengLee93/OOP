@@ -35,7 +35,7 @@ void CGameStateInit::OnInit()
 	for (unsigned i = 0; i < levels_images.size(); i++)
 	{
 		levels[i].LoadBitmapByString({levels_images[i]}, RGB(255, 255, 255));
-		levels[i].SetTopLeft((i + 1) *150, 700);
+		levels[i].SetTopLeft((i + 1) * 150, 700);
 	}
 	//
 	// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人

@@ -25,10 +25,10 @@ private:
 public:
     UpdateStairs();
     
-    CMovingBitmap Getpicture();
-    void SetID(unsigned new_id);
+    virtual CMovingBitmap Getpicture();
+    virtual void SetID(unsigned new_id);
     void SetHidden(bool isHidden);
-    void Setxy(int new_x, int new_y);
+    virtual void Setxy(int new_x, int new_y);
     int Getx();
     int Gety();
     unsigned GetID();

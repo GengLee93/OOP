@@ -99,7 +99,6 @@ namespace game_framework {
 		void restart_game();
 		
 		// initialize map
-		CMovingBitmap coin;
 		CMovingBitmap background;
 		CMovingBitmap ceiling; // ¤ÑªáªO
 		CMovingBitmap nails; // ¦a¨ë
@@ -111,11 +110,13 @@ namespace game_framework {
 		CMovingBitmap walls[2];
 		CMovingBitmap trampoline; // ¼uÂ®
 		std::vector<UpdateStairs> stairs;
+		std::vector<UpdateStairs> coins;
 		
 
 		// initialize player
 		int life = 5;
 		int score = 0;
+		int coin_point = 0;
 
 		// player and stairs' logic
 		bool touchnail = false;
