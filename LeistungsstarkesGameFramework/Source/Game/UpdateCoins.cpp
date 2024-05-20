@@ -18,7 +18,7 @@ void UpdateCoins::Setxy(int new_x, int new_y)
 
 void UpdateCoins::LoadCoin()
 {
-    coin_picture.LoadBitmapByString(this->coinpic, RGB(255, 255, 255));
+    coin_picture.LoadBitmapByString(coin_images, RGB(0, 0, 0));
 }
 
 

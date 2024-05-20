@@ -40,6 +40,11 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	if (select_level == 7)
+	{
+		coin_mark.SetTopLeft(coin_mark.GetLeft(), coin_mark.GetHeight() + 1);
+	} 
+	
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<double> probabilities;
@@ -79,8 +84,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		{
 			
 		}
-
-		
 		
 		if (CMovingBitmap::IsOverlap(player, stairs[i].Getpicture()))
 		{
@@ -176,13 +179,23 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
 		
-		 UpdateCoins coin;
-		 coin.LoadCoin();
-		 coin.Getpicture().SetAnimation(50,false);
-		 coin.Setxy(350, 350);
-		 coins.push_back(coin);
+		UpdateCoins coin;
+		coin.LoadCoin();
+		coin.Getpicture().SetAnimation(50,false);
+		coins.push_back(coin);
 	}
-
+	coin_mark.LoadBitmapByString({
+			"Resources/coin1.bmp",
+			"Resources/coin2.bmp",
+			"Resources/coin3.bmp",
+			"Resources/coin4.bmp",
+			"Resources/coin5.bmp",
+			"Resources/coin6.bmp",
+			"Resources/coin7.bmp"
+		}, RGB(0, 0, 0));
+	coin_mark.SetAnimation(50, false);
+	coin_mark.SetTopLeft(900, 300);
+	
 	// player
 	player.LoadBitmapByString({
 		"Resources/p1.bmp",
@@ -190,8 +203,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		"Resources/p3.bmp",
 		"Resources/p4.bmp",
 		"Resources/p5.bmp"}, RGB(255, 255, 255));
-	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(450, 180);
+	player.SetFrameIndexOfBitmap(0);
 }
 	
 
@@ -284,11 +297,15 @@ void CGameStateRun::OnShow()
 	}
 	if (select_level == 7)
 	{
-		for (unsigned i = 0; i < 9; i++)
+		for(auto& coin : coins)
 		{
-			coins[i].Getpicture().ShowBitmap();
+			coin.Getpicture().ShowBitmap();
 		}
+		coin_mark.ShowBitmap();
 	}
+	
+	
+	
 	if (CMovingBitmap::IsOverlap(player, background))
 	{
 		player.ShowBitmap();
@@ -304,7 +321,7 @@ void CGameStateRun::OnShow()
 void CGameStateRun::restart_game()
 {
 	stairs.clear();
-	// coins.clear();
+	coins.clear();
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	for (int i = 0; i < 9; i++)
@@ -360,10 +377,9 @@ void CGameStateRun::draw_text()
 	{
 		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 		std::string coin_text;
-		coin_text = "      " + std::to_string(coin_point) + "/10";
+		coin_text = "      " + std::to_string(coin_point) + "/9";
 		CTextDraw::Print(pDC, 900, 300, coin_text);
 	}
-
 	
 	CDDraw::ReleaseBackCDC();
 }

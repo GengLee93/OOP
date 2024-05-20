@@ -10,7 +10,7 @@ class UpdateCoins
 {
 private:
     CMovingBitmap coin_picture;
-    std::vector<std::string> coinpic = {
+    std::vector<std::string> coin_images = {
         "Resources/coin1.bmp",
         "Resources/coin2.bmp",
         "Resources/coin3.bmp",

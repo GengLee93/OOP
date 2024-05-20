@@ -112,6 +112,7 @@ namespace game_framework {
 		CMovingBitmap trampoline; // ¼uÂ®
 		std::vector<UpdateStairs> stairs;
 		std::vector<UpdateCoins> coins;
+		CMovingBitmap coin_mark;
 		
 
 		// initialize player
