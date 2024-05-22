@@ -45,7 +45,7 @@ void BaseLevel::SetLevel(int level)
     else if (level == 7)
     {
         stairs_probability = {0.99, 0, 0, 0, 0, 0};
-        stairs_speed = 6;
+        stairs_speed = 5;
     }
 }
 

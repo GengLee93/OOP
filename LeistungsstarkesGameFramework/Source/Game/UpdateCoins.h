@@ -21,11 +21,16 @@ private:
     };
     int coin_x;
     int coin_y;
+    bool isHidden = false;
 public:
     UpdateCoins();
 
-    CMovingBitmap Getpicture();
-    void Setxy(int new_x, int new_y);
-    void LoadCoin();
+    
+    void LoadCoinBitmap();
+    void Setxy(int x, int y);
+    void SetHidden(bool isHidden);
     void ismove(bool s);
+    CMovingBitmap Getpicture();
+    bool GetHidden();
+    
 };

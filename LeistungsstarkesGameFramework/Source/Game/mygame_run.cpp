@@ -7,13 +7,9 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
-#include <stdlib.h>
-#include <time.h>
 #include <string>
 #include <random>
-#include <chrono>
 #include <thread>
-#include <ctime>
 
 #include "UpdateStairs.h"
 #include "UpdateCoins.h"
@@ -59,9 +55,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	{
 		
 		stairs[i].Setxy(stairs[i].Getx(), stairs[i].Gety() - level.GetSpeed());
-		if (select_level == 7  ) 
+		if (select_level == 7) 
 		{
-			coin_mark.SetTopLeft(stairs[6].Getx() + 30 ,stairs[6].Gety() - 40);
+			coin_mark.SetTopLeft(stairs[6].Getx() + 30 ,stairs[6].Gety() - 45);
 		}
 		if(CMovingBitmap::IsOverlap(player,coin_mark))
 		{
@@ -185,7 +181,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		stairs.push_back(block);
 		
 		UpdateCoins coin;
-		coin.LoadCoin();
+		coin.LoadCoinBitmap();
 		coin.Setxy(300,300);
 		coin.ismove(1);
 		coins.push_back(coin);
@@ -200,7 +196,7 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 			"Resources/coin7.bmp"
 		}, RGB(255, 255, 255));
 	coin_mark.SetAnimation(50, false);
-	 coin_mark.SetTopLeft(90,90 );
+	coin_mark.SetTopLeft(90, 90);
 	
 	
 	// player
@@ -313,8 +309,6 @@ void CGameStateRun::OnShow()
 			coin_mark.ShowBitmap();
 	}
 	
-	
-	
 	if (CMovingBitmap::IsOverlap(player, background))
 	{
 		player.ShowBitmap();
@@ -343,7 +337,7 @@ void CGameStateRun::restart_game()
 		stairs.push_back(block);
 		
 		UpdateCoins coin;
-		coin.LoadCoin();
+		coin.LoadCoinBitmap();
 		coin.Getpicture().SetAnimation(50, false);
 		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
 		coins.push_back(coin);
@@ -355,8 +349,8 @@ void CGameStateRun::restart_game()
 	gravity_y = 0;
 	score = 0;
 	coin_point = 0;
-	wait =0;
-	k= false;
+	wait = 0;
+	k = false;
 	GotoGameState(GAME_STATE_OVER);
 }
 
