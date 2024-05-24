@@ -113,11 +113,13 @@ namespace game_framework {
 		std::vector<UpdateStairs> stairs;
 		std::vector<UpdateCoins> coins;
 		CMovingBitmap coin_mark;
+		CMovingBitmap charge;
+		float ele = 0;
 
 		// initialize player
 		int life = 5;
 		int score = 0;
-		int coin_point = 0;
+		int coinpp  = 0;
 
 		// player and stairs' logic
 		bool touchnail = false;
@@ -129,6 +131,7 @@ namespace game_framework {
 		bool right_key_pressed = false;
 		int velocity_y = 0;
 		int gravity_y = 0;
+		
 		// coin
 		bool k = false;
 		int wait = 0;

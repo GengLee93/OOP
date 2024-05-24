@@ -30,6 +30,7 @@ namespace game_framework {
 	CGame CGame::instance;
 	unsigned CGameState::HI;
 	int CGameState::select_level;
+	float CGameState::coin_point;
 
 	CGame::CGame()
 		: NUM_GAME_STATES(3)
