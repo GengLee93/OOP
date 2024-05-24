@@ -280,7 +280,7 @@ void CGameStateRun::OnShow()
 {
 	draw_text();
 	
-	background.SetFrameIndexOfBitmap(1);
+	background.SetFrameIndexOfBitmap(select_level - 1);
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
 	for (auto& wall : walls)
