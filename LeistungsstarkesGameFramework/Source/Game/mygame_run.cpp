@@ -143,6 +143,20 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		k = 0;
 		wait = 0; 
 	}
+	ele = coin_point;
+	ele = ele / 150;
+	if(ele > 24)
+	{
+		charge.SetFrameIndexOfBitmap(1);
+	}
+	else if(ele >49)
+	{
+		charge.SetFrameIndexOfBitmap(2);
+	}
+	else if(ele >74)
+	{
+		charge.SetFrameIndexOfBitmap(3);
+	}
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
@@ -154,7 +168,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		"Resources/whie.bmp",
 		"Resources/mount.bmp",
 		"Resources/lr.bmp",
-		"Resources/uiverse.bmp"});
+		"Resources/uiverse.bmp",
+		"Resources/background.bmp"});
 	background.SetTopLeft(100, 150);
 	
 	// wall
@@ -208,6 +223,15 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		"Resources/p5.bmp"}, RGB(255, 255, 255));
 	player.SetTopLeft(450, 180);
 	player.SetFrameIndexOfBitmap(0);
+	
+	//TESLA
+	charge.LoadBitmapByString({
+		"Resources/0.bmp"
+		,"Resources/50.bmp"
+		,"Resources/75.bmp"
+		,"Resources/100.bmp"
+	},RGB(255,255,255));
+	charge.SetFrameIndexOfBitmap(0); 
 }
 	
 
@@ -300,11 +324,6 @@ void CGameStateRun::OnShow()
 	}
 	if (select_level == 7 )
 	{
-		 //for(auto& coin : coins)
-		// // {
-		// coins[0].ismove(1);
-		// coins[0].Getpicture().ShowBitmap();
-		 // }
 		if(k == 0)
 			coin_mark.ShowBitmap();
 	}
@@ -348,7 +367,6 @@ void CGameStateRun::restart_game()
 	life = 5;
 	gravity_y = 0;
 	score = 0;
-	coin_point = 0;
 	wait = 0;
 	k = false;
 	GotoGameState(GAME_STATE_OVER);
@@ -364,27 +382,40 @@ void CGameStateRun::draw_text()
 	level = "Level " + std::to_string(select_level);
 	CTextDraw::Print(pDC, 900, 150, level);
 
-	// print HI
-	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-	std::string HI_text;
-	HI = score;
-	HI_text = "score " + std::to_string((HI));
-	CTextDraw::Print(pDC, 900, 200, HI_text);
+	if(select_level ==  7)
+	{
+		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+		std::string coin_text;
+		coin_text = "coin point " + std::to_string(int(coin_point/50)) + "/100";
+		CTextDraw::Print(pDC, 900, 200, coin_text);
+		
+		
+	}
+	//else if(select_level == 3)
+	//{
+	//	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+	//	std::string charge_text;
+	//	charge_text = "ele " + std::to_string(int(ele)) + "/100";
+	//	CTextDraw::Print(pDC, 900, 200, charge_text);
+	//}
+	else
+	{
+		// print HI
+		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
+		std::string HI_text;
+		HI = score;
+		HI_text = "score " + std::to_string((HI));
+		CTextDraw::Print(pDC, 900, 200, HI_text);
+	}
+	
+	
 	
 	// print life
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 	std::string life_text;
 	life_text = "Life " + std::to_string(life);
 	CTextDraw::Print(pDC, 900, 250, life_text);
-
-	// coin
-	if (select_level == 7)
-	{
-		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-		std::string coin_text;
-		coin_text = "      " + std::to_string(coin_point) + "/1000000";
-		CTextDraw::Print(pDC, 900, 300, coin_text);
-	}
+	
 	
 	CDDraw::ReleaseBackCDC();
 }

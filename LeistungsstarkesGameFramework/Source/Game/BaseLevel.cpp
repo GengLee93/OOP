@@ -16,7 +16,7 @@ void BaseLevel::SetLevel(int level)
     else if (level == 2)
     {
         // normal stair and fake stair
-        stairs_probability = {0, 0.2, 0, 0, 0., 0.8};
+        stairs_probability = {0.05, 0.15, 0, 0, 0., 0.8};
         stairs_speed = 5;
     }
     else if (level == 3)
