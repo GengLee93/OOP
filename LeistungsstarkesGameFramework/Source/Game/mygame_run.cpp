@@ -198,9 +198,9 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 			"Resources/coin5.bmp",
 			"Resources/coin6.bmp",
 			"Resources/coin7.bmp"
-		}, RGB(255, 255, 255));
+		}, RGB(0, 0, 0));
 	coin_mark.SetAnimation(50, false);
-	 coin_mark.SetTopLeft(90,90 );
+	coin_mark.SetTopLeft(90, 90);
 	
 	
 	// player
