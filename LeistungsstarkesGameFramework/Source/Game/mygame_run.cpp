@@ -138,7 +138,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	}
 	
 	wait += 1;
-	if(wait %45 == 38)
+	if(wait %250 == 249)
 	{
 		k = 0;
 		wait = 0; 
@@ -156,6 +156,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	else if(ele >74)
 	{
 		charge.SetFrameIndexOfBitmap(3);
+	}
+	if (score % 4 == 1 )
+	{
+		if(coin_point >= 2) coin_point  -=  2;
 	}
 }
 
@@ -231,7 +235,8 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		,"Resources/75.bmp"
 		,"Resources/100.bmp"
 	},RGB(255,255,255));
-	charge.SetFrameIndexOfBitmap(0); 
+	charge.SetFrameIndexOfBitmap(0);
+	coin_point = 0;
 }
 	
 
@@ -334,7 +339,33 @@ void CGameStateRun::OnShow()
 	}
 
 	// restart
-	if (player.GetTop() > 850 || life == 0)
+	if (player.GetTop() > 850 || life == 0 )
+	{
+		restart_game();
+	}
+	if(select_level == 1 && score == 50)
+		restart_game();
+	else if(select_level == 2 && score == 200)
+	{
+		restart_game();
+	}
+	else if(select_level == 3 && score == 160)
+	{
+		restart_game();
+	}
+	else if(select_level == 4 && score == 400)
+	{
+		restart_game();
+	}
+	else if (select_level == 5 && score == 190)
+	{
+		restart_game();
+	}
+	else if(select_level == 6 && score == 170)
+	{
+		restart_game();
+	}
+	else if (select_level == 7 && int(coin_point/80) == 100)
 	{
 		restart_game();
 	}
@@ -386,19 +417,12 @@ void CGameStateRun::draw_text()
 	{
 		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 		std::string coin_text;
-		coin_text = "coin point " + std::to_string(int(coin_point/50)) + "/100";
+		coin_text = "coin point " + std::to_string(int(coin_point/80)) + "/100";
 		CTextDraw::Print(pDC, 900, 200, coin_text);
 		
 		
 	}
-	//else if(select_level == 3)
-	//{
-	//	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
-	//	std::string charge_text;
-	//	charge_text = "ele " + std::to_string(int(ele)) + "/100";
-	//	CTextDraw::Print(pDC, 900, 200, charge_text);
-	//}
-	else
+	else 
 	{
 		// print HI
 		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));

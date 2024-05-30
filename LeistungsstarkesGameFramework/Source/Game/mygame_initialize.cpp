@@ -64,6 +64,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 		if (is_overlap(levels[i], point))
 		{
 			select_level = i + 1;
+			coin_point  = 0;
 			GotoGameState(GAME_STATE_RUN);		// ¤Á´«¦ÜGAME_STATE_RUN
 			break;
 		}
