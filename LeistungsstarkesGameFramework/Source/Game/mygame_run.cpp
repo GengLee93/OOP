@@ -12,7 +12,6 @@
 #include <thread>
 
 #include "UpdateStairs.h"
-#include "UpdateCoins.h"
 #include "BaseLevel.h"
 
 using namespace game_framework;
@@ -46,7 +45,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	std::uniform_int_distribution<> dis_x(150, 610);
 	
 	// choose level
-	BaseLevel level;
+	
 	level.SetLevel(select_level);
 	probabilities = level.GetStairsProbability();
 	std::discrete_distribution<> dis(probabilities.begin(), probabilities.end());
@@ -69,7 +68,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		if (stairs[i].Gety() < 180)
 		{
 			score += 1;
-			if(score % 8 == 0 && life < 5)
+			if(score % 1 == 0 && life < 15)
 			{
 				life += 1;
 			}
@@ -138,28 +137,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	}
 	
 	wait += 1;
-	if(wait %250 == 249)
+	if(wait % 120 == 119)
 	{
 		k = 0;
 		wait = 0; 
-	}
-	ele = coin_point;
-	ele = ele / 150;
-	if(ele > 24)
-	{
-		charge.SetFrameIndexOfBitmap(1);
-	}
-	else if(ele >49)
-	{
-		charge.SetFrameIndexOfBitmap(2);
-	}
-	else if(ele >74)
-	{
-		charge.SetFrameIndexOfBitmap(3);
-	}
-	if (score % 4 == 1 )
-	{
-		if(coin_point >= 2) coin_point  -=  2;
 	}
 }
 
@@ -199,11 +180,11 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
 		
-		UpdateCoins coin;
-		coin.LoadCoinBitmap();
-		coin.Setxy(300,300);
-		coin.ismove(1);
-		coins.push_back(coin);
+		// UpdateCoins coin;
+		// coin.LoadCoinBitmap();
+		// coin.Setxy(300,300);
+		// coin.ismove(1);
+		// coins.push_back(coin);
 	}
 	coin_mark.LoadBitmapByString({
 			"Resources/coin1.bmp",
@@ -227,16 +208,21 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		"Resources/p5.bmp"}, RGB(255, 255, 255));
 	player.SetTopLeft(450, 180);
 	player.SetFrameIndexOfBitmap(0);
-	
-	//TESLA
-	charge.LoadBitmapByString({
-		"Resources/0.bmp"
-		,"Resources/50.bmp"
-		,"Resources/75.bmp"
-		,"Resources/100.bmp"
-	},RGB(255,255,255));
-	charge.SetFrameIndexOfBitmap(0);
-	coin_point = 0;
+
+	coin_label.LoadBitmapByString({
+			"Resources/coin1.bmp",
+			"Resources/coin2.bmp",
+			"Resources/coin3.bmp",
+			"Resources/coin4.bmp",
+			"Resources/coin5.bmp",
+			"Resources/coin6.bmp",
+			"Resources/coin7.bmp"
+		}, RGB(0, 0, 0));
+	coin_label.SetAnimation(50, false);
+	coin_label.SetTopLeft(910, 205);
+
+	blood.LoadBitmapByString({"Resources/blood.bmp"}, RGB(255, 242, 0));
+	blood.SetTopLeft(915, 254);
 }
 	
 
@@ -312,6 +298,7 @@ void CGameStateRun::OnShow()
 	background.SetFrameIndexOfBitmap(select_level - 1);
 	background.ShowBitmap();
 	ceiling.ShowBitmap();
+	blood.ShowBitmap();
 	for (auto& wall : walls)
 	{
 		wall.ShowBitmap();
@@ -331,6 +318,7 @@ void CGameStateRun::OnShow()
 	{
 		if(k == 0)
 			coin_mark.ShowBitmap();
+			coin_label.ShowBitmap();
 	}
 	
 	if (CMovingBitmap::IsOverlap(player, background))
@@ -339,36 +327,25 @@ void CGameStateRun::OnShow()
 	}
 
 	// restart
+	
 	if (player.GetTop() > 850 || life == 0 )
 	{
 		restart_game();
 	}
-	if(select_level == 1 && score == 50)
-		restart_game();
-	else if(select_level == 2 && score == 200)
+	if ((select_level == 7))
 	{
+		if(level.isLoseOrWin(7, int(coin_point)))
+		{
+			isWin =true;
+			restart_game();
+		}
+	}
+	else if (level.isLoseOrWin(select_level, score))
+	{
+		isWin = true;
 		restart_game();
 	}
-	else if(select_level == 3 && score == 160)
-	{
-		restart_game();
-	}
-	else if(select_level == 4 && score == 400)
-	{
-		restart_game();
-	}
-	else if (select_level == 5 && score == 190)
-	{
-		restart_game();
-	}
-	else if(select_level == 6 && score == 170)
-	{
-		restart_game();
-	}
-	else if (select_level == 7 && int(coin_point/80) == 100)
-	{
-		restart_game();
-	}
+		
 }
 
 void CGameStateRun::restart_game()
@@ -385,12 +362,6 @@ void CGameStateRun::restart_game()
 		block.Getpicture();
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
-		
-		UpdateCoins coin;
-		coin.LoadCoinBitmap();
-		coin.Getpicture().SetAnimation(50, false);
-		coin.Setxy(block.Getx() + 50, block.Gety() - 10);
-		coins.push_back(coin);
 	}
 	player.SetTopLeft(450, 180);
 	left_key_pressed = false;
@@ -417,7 +388,7 @@ void CGameStateRun::draw_text()
 	{
 		CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 		std::string coin_text;
-		coin_text = "coin point " + std::to_string(int(coin_point/80)) + "/100";
+		coin_text = "         " + std::to_string(int(coin_point/80)) + "/100";
 		CTextDraw::Print(pDC, 900, 200, coin_text);
 		
 		
@@ -437,8 +408,9 @@ void CGameStateRun::draw_text()
 	// print life
 	CTextDraw::ChangeFontLog(pDC, 30, "微軟正黑體", RGB(255, 255, 255));
 	std::string life_text;
-	life_text = "Life " + std::to_string(life);
+	life_text ="         "+ std::to_string(life);
 	CTextDraw::Print(pDC, 900, 250, life_text);
+	
 	
 	
 	CDDraw::ReleaseBackCDC();

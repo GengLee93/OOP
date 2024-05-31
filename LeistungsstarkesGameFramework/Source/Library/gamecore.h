@@ -148,6 +148,7 @@ namespace game_framework {
 		static unsigned HI;
 		static int select_level;
 		static float coin_point;
+		static bool isWin;
 	protected:
 		void GotoGameState(int state);							// 跳躍至指定的state
 		void ShowInitProgress(int percent, string message);						// 顯示初始化的進度

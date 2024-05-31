@@ -31,6 +31,7 @@ namespace game_framework {
 	unsigned CGameState::HI;
 	int CGameState::select_level;
 	float CGameState::coin_point;
+	bool CGameState::isWin;
 
 	CGame::CGame()
 		: NUM_GAME_STATES(3)

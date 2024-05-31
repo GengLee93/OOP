@@ -20,4 +20,5 @@ public:
     unsigned GetSpeed();
     vector<double> GetStairsProbability();
     int GetLevel();
+    bool isLoseOrWin(int select_level, int score);
 };

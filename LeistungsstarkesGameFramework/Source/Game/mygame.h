@@ -40,6 +40,7 @@
 
 #include "UpdateStairs.h"
 #include "UpdateCoins.h"
+#include "BaseLevel.h"
 
 
 namespace game_framework {
@@ -113,8 +114,10 @@ namespace game_framework {
 		std::vector<UpdateStairs> stairs;
 		std::vector<UpdateCoins> coins;
 		CMovingBitmap coin_mark;
+		CMovingBitmap coin_label;
 		CMovingBitmap charge;
-		float ele = 0;
+		CMovingBitmap blood;
+		BaseLevel level;
 
 		// initialize player
 		int life = 5;
@@ -154,6 +157,8 @@ namespace game_framework {
 	private:
 		int counter;	// 倒數之計數器
 		void draw_text();
+		CMovingBitmap over;
+		CMovingBitmap win;
 		
 		
 	};
