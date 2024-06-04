@@ -68,7 +68,11 @@ void CGameStateRun::OnMove()							// ²¾°Ê¹CÀ¸¤¸¯À
 		if (stairs[i].Gety() < 180)
 		{
 			score += 1;
-			if(score % 1 == 0 && life < 15)
+			if(isinvic)
+			{
+				life = 9999;
+			}
+			else if (score % 8 == 7 && life < 7)
 			{
 				life += 1;
 			}
@@ -366,7 +370,14 @@ void CGameStateRun::restart_game()
 	player.SetTopLeft(450, 180);
 	left_key_pressed = false;
 	right_key_pressed = false;
-	life = 5;
+	if(isinvic)
+	{
+		life = 9999;
+	}
+	else 
+	{
+		life = 5;
+	}
 	gravity_y = 0;
 	score = 0;
 	wait = 0;

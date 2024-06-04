@@ -37,16 +37,12 @@ void CGameStateInit::OnInit()
 		levels[i].LoadBitmapByString({levels_images[i]}, RGB(255, 255, 255));
 		levels[i].SetTopLeft((i + 1) * 150, 700);
 	}
-	//
-	// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
-	//     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
-	//
-	// ShowInitProgress(0, "Start Initialize...");	// 一開始的loading進度為0%
-	//
-	// Sleep(1000);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
-	//
-	// 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
-	//
+	prtostr.LoadBitmapByString({"Resources/ptstart.bmp"},RGB(255, 255, 255));
+	prtostr.SetTopLeft(540,560);
+	NSHAFT.LoadBitmapByString({"Resources/NS.bmp"},RGB(255, 255, 255));
+	NSHAFT.SetTopLeft(340, 260);
+	invic.LoadBitmapByString({"Resources/invi.bmp", "Resources/nrmo.bmp"},RGB(255, 255, 255));
+	invic.SetTopLeft(1300,20);
 }
 
 void CGameStateInit::OnBeginState()
@@ -69,6 +65,16 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 			break;
 		}
 	}
+	if (is_overlap(invic, point) && invic.GetFrameIndexOfBitmap() == 0)
+	{
+		isinvic = 1;
+		invic.SetFrameIndexOfBitmap(1);
+	}
+	else if(is_overlap(invic, point) && invic.GetFrameIndexOfBitmap() == 1)
+	{
+		isinvic = 0;
+		invic.SetFrameIndexOfBitmap(0);
+	}
 }
 
 void CGameStateInit::OnShow()
@@ -77,19 +83,22 @@ void CGameStateInit::OnShow()
 	{
 		level.ShowBitmap();
 	}
+	prtostr.ShowBitmap();
+	NSHAFT.ShowBitmap();
+	invic.ShowBitmap();
 	draw_text();
 }
 
 void CGameStateInit::draw_text() {
 	CDC *pDC = CDDraw::GetBackCDC();
 
-	/* Print title */
-	CTextDraw::ChangeFontLog(pDC, 44, "微軟正黑體", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 290, 231, "小朋友下樓梯");
+	// /* Print title */
+	// CTextDraw::ChangeFontLog(pDC, 44, "微軟正黑體", RGB(255, 255, 255));
+	// CTextDraw::Print(pDC, 290, 231, "小朋友下樓梯");
 
-	/* Print info */
-	CTextDraw::ChangeFontLog(pDC,  34, "微軟正黑體", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 282, 531, "Choose Level to Start");
+	// /* Print info */
+	// CTextDraw::ChangeFontLog(pDC,  34, "微軟正黑體", RGB(255, 255, 255));
+	// CTextDraw::Print(pDC, 282, 531, "Choose Level to Start");
 
 	CDDraw::ReleaseBackCDC();
 }

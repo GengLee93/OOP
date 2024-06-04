@@ -73,6 +73,10 @@ namespace game_framework {
 		bool is_overlap(CMovingBitmap bitmap, CPoint point);
 		CMovingBitmap logo;								// csieªºlogo
 		CMovingBitmap levels[7];
+		CMovingBitmap invinci;
+		CMovingBitmap prtostr;
+		CMovingBitmap NSHAFT;
+		CMovingBitmap invic;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
