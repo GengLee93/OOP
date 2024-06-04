@@ -59,7 +59,7 @@ void CGameStateOver::draw_text()
 		CTextDraw::ChangeFontLog(pDC, 30, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
 		std::string coin_text;
 		coin_text = " coin point :" + std::to_string(int(coin_point/80));
-		CTextDraw::Print(pDC, 530, 600, coin_text);
+		CTextDraw::Print(pDC, 500, 600, coin_text);
 		CDDraw::ReleaseBackCDC();
 
 	}

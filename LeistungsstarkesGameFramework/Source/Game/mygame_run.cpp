@@ -146,6 +146,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		k = 0;
 		wait = 0; 
 	}
+	if(score % 4 == 3 && coin_point > 50)
+	{
+		coin_point -= 2;
+	}
 }
 
 void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
