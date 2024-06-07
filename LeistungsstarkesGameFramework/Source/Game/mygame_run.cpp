@@ -140,7 +140,7 @@ void CGameStateRun::OnMove()							// ²¾°Ê¹CÀ¸¤¸¯À
 	}
 	
 	wait += 1;
-	if(wait % 120 == 119)
+	if(!CMovingBitmap::IsOverlap(player, coin_mark))
 	{
 		k = 0;
 		wait = 0; 
