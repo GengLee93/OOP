@@ -10,7 +10,6 @@
 #include <string>
 #include <random>
 #include <thread>
-
 #include "UpdateStairs.h"
 #include "BaseLevel.h"
 
