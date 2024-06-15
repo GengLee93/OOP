@@ -39,7 +39,6 @@
 */
 
 #include "UpdateStairs.h"
-#include "UpdateCoins.h"
 #include "BaseLevel.h"
 
 
@@ -116,7 +115,6 @@ namespace game_framework {
 		CMovingBitmap walls[2];
 		CMovingBitmap trampoline; // ¼uÂ®
 		std::vector<UpdateStairs> stairs;
-		std::vector<UpdateCoins> coins;
 		CMovingBitmap coin_mark;
 		CMovingBitmap coin_label;
 		CMovingBitmap charge;

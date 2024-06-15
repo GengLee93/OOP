@@ -33,7 +33,7 @@ void CGameStateOver::OnInit()
 	win.LoadBitmapByString({"Resources/picwin.bmp"});
 	over.SetTopLeft(380,130);
 	win.SetTopLeft(380,130);
-	
+		
 }
 
 void CGameStateOver::OnShow()

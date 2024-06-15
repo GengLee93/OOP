@@ -186,12 +186,6 @@ void CGameStateRun::OnInit() 							// 遊戲的初值及圖形設定
 		block.Getpicture();
 		block.Setxy(dis_x(gen), 400 + i * 150);
 		stairs.push_back(block);
-		
-		// UpdateCoins coin;
-		// coin.LoadCoinBitmap();
-		// coin.Setxy(300,300);
-		// coin.ismove(1);
-		// coins.push_back(coin);
 	}
 	coin_mark.LoadBitmapByString({
 			"Resources/coin1.bmp",
@@ -334,16 +328,20 @@ void CGameStateRun::OnShow()
 	}
 
 	// restart
-	
+	if (isinvic && player.GetTop() > 850)
+	{
+		player.SetTopLeft(450, 180);
+	}
 	if (player.GetTop() > 850 || life == 0 )
 	{
 		restart_game();
 	}
-	if ((select_level == 7))
+	
+	if (select_level == 7)
 	{
 		if(level.isLoseOrWin(7, int(coin_point)))
 		{
-			isWin =true;
+			isWin = true;
 			restart_game();
 		}
 	}
@@ -358,7 +356,6 @@ void CGameStateRun::OnShow()
 void CGameStateRun::restart_game()
 {
 	stairs.clear();
-	coins.clear();
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	for (int i = 0; i < 9; i++)
