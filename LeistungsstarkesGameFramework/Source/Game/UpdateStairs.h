@@ -28,7 +28,7 @@ public:
     CMovingBitmap Getpicture();
     void SetID(unsigned new_id);
     void SetHidden(bool isHidden);
-    virtual void Setxy(int new_x, int new_y);
+    void Setxy(int new_x, int new_y);
     int Getx();
     int Gety();
     unsigned GetID();
